@@ -20,3 +20,667 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+assemblyinfo.cs
+
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+// La información general sobre un ensamblado se controla mediante el siguiente 
+// conjunto de atributos. Cambie los valores de estos atributos para modificar la información
+// asociada a un ensamblado.
+[assembly: AssemblyTitle("WebAPI")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("ALTEN")]
+[assembly: AssemblyProduct("WebAPI")]
+[assembly: AssemblyCopyright("Copyright © ALTEN 2023")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// Si ComVisible se establece en false, los componentes COM no verán los 
+// tipos de este ensamblado. Si necesita obtener acceso a un tipo de este ensamblado desde 
+// COM, establezca el atributo ComVisible en true en este tipo.
+[assembly: ComVisible(false)]
+
+// El siguiente GUID sirve como ID de typelib si este proyecto se expone a COM
+[assembly: Guid("9f8158ff-049a-4ddc-a057-c8f8b4478625")]
+
+// La información de versión de un ensamblado consta de los siguientes cuatro valores:
+//
+//      Versión principal
+//      Versión secundaria 
+//      Número de compilación
+//      Revisión
+//
+// Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión 
+// mediante el carácter '*', como se muestra a continuación:
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
+
+
+
+webApiConfig.cs
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using System.Web.Http.Cors;
+
+namespace WebAPI
+{
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            // Configuración y servicios de Web API
+            EnableCorsAttribute cors = new EnableCorsAttribute("*","*","*");
+            config.EnableCors(cors);
+
+            // Rutas de Web API
+            config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+        }
+    }
+}
+
+EgresoController.cs
+
+using Comun.ViewModels;
+using Logica.BLL;
+using Modelo.Modelos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Cors;
+
+namespace WebAPI.Controllers
+{
+    public class EgresoController : ApiController
+    {
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [HttpGet]
+        public IHttpActionResult LeerTodo(int cantidad = 10, int pagina = 0, string textoBusqueda = null)
+        {
+            var respuesta = new RespuestaVMR<ListadoPaginadoVMR<EgresoVMR>>();
+
+            try
+            {
+                respuesta.datos = EgresoBLL.LeerTodo(cantidad, pagina, textoBusqueda);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpGet]
+        public IHttpActionResult LeerUno(long id)
+        {
+            var respuesta = new RespuestaVMR<EgresoVMR>();
+
+            try
+            {
+                respuesta.datos = EgresoBLL.LeerUno(id);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            if (respuesta.datos == null && respuesta.mensajes.Count() == 0)
+            {
+                respuesta.codigo = HttpStatusCode.NotFound;
+                respuesta.mensajes.Add("Elemento no encontrado");
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPost]
+        public IHttpActionResult Crear(Egreso item)
+        {
+            var respuesta = new RespuestaVMR<long?>();
+
+            try
+            {
+                respuesta.datos = EgresoBLL.Crear(item);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPut]
+        public IHttpActionResult Actualizar(long id, EgresoVMR item)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                item.id = id;
+                EgresoBLL.Actualizar(item);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpDelete]
+        public IHttpActionResult Eliminar(List<long> ids)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                EgresoBLL.Eliminar(ids);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+    }
+}
+
+IngresoController.cs
+
+
+using Comun.ViewModels;
+using Logica.BLL;
+using Modelo.Modelos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Comun.ViewModels;
+using Logica.BLL;
+using Modelo.Modelos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Cors;
+
+namespace WebAPI.Controllers
+{
+    public class IngresoController : ApiController
+    {
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [HttpGet]
+        public IHttpActionResult LeerTodo(int cantidad = 10, int pagina = 0, string textoBusqueda = null)
+        {
+            var respuesta = new RespuestaVMR<ListadoPaginadoVMR<IngresoVMR>>();
+
+            try
+            {
+                respuesta.datos = IngresoBLL.LeerTodo(cantidad, pagina, textoBusqueda);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpGet]
+        public IHttpActionResult LeerUno(long id)
+        {
+            var respuesta = new RespuestaVMR<IngresoVMR>();
+
+            try
+            {
+                respuesta.datos = IngresoBLL.LeerUno(id);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            if (respuesta.datos == null && respuesta.mensajes.Count() == 0)
+            {
+                respuesta.codigo = HttpStatusCode.NotFound;
+                respuesta.mensajes.Add("Elemento no encontrado");
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPost]
+        public IHttpActionResult Crear(Ingreso item)
+        {
+            var respuesta = new RespuestaVMR<long?>();
+
+            try
+            {
+                respuesta.datos = IngresoBLL.Crear(item);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPut]
+        public IHttpActionResult Actualizar(long id, IngresoVMR item)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                item.id = id;
+                IngresoBLL.Actualizar(item);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpDelete]
+        public IHttpActionResult Eliminar(List<long> ids)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                IngresoBLL.Eliminar(ids);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+    }
+}
+
+
+MedicoController.cs
+
+
+using Comun.ViewModels;
+using Logica.BLL;
+using Modelo.Modelos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Http;
+using System.Web.Http.Cors;
+
+namespace WebAPI.Controllers
+{
+    public class MedicoController : ApiController
+    {
+        // [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [HttpGet]
+        public IHttpActionResult LeerTodo(int cantidad = 10, int pagina = 0, string textoBusqueda = null)
+        {
+            var respuesta = new RespuestaVMR<ListadoPaginadoVMR<MedicoVMR>>();
+
+            try
+            {
+                respuesta.datos = MedicoBLL.LeerTodo(cantidad, pagina, textoBusqueda);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpGet]
+        public IHttpActionResult LeerUno(long id)
+        {
+            var respuesta = new RespuestaVMR<MedicoVMR>();
+
+            try
+            {
+                respuesta.datos = MedicoBLL.LeerUno(id);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            if (respuesta.datos == null && respuesta.mensajes.Count() == 0)
+            {
+                respuesta.codigo = HttpStatusCode.NotFound;
+                respuesta.mensajes.Add("Elemento no encontrado");
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPost]
+        public IHttpActionResult Crear(Medico item)
+        {
+            var respuesta = new RespuestaVMR<long?>();
+
+            try
+            {
+                respuesta.datos = MedicoBLL.Crear(item);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPut]
+        public IHttpActionResult Actualizar(long id, MedicoVMR item)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                item.id = id;
+                MedicoBLL.Actualizar(item);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpDelete]
+        public IHttpActionResult Eliminar(List<long> ids)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                MedicoBLL.Eliminar(ids);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+
+    }
+}
+
+
+PacienteController.cs
+
+
+using Comun.ViewModels;
+using Logica.BLL;
+using Modelo.Modelos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Http;
+using System.Web.Http.Cors;
+
+namespace WebAPI.Controllers
+{
+    public class PacienteController : ApiController
+    {
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [HttpGet]
+        public IHttpActionResult LeerTodo(int cantidad = 10, int pagina = 0, string textoBusqueda = null)
+        {
+            var respuesta = new RespuestaVMR<ListadoPaginadoVMR<PacienteVMR>>();
+
+            try
+            {
+                respuesta.datos = PacienteBLL.LeerTodo(cantidad, pagina, textoBusqueda);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpGet]
+        public IHttpActionResult LeerUno(long id)
+        {
+            var respuesta = new RespuestaVMR<PacienteVMR>();
+
+            try
+            {
+                respuesta.datos = PacienteBLL.LeerUno(id);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            if (respuesta.datos == null && respuesta.mensajes.Count() == 0)
+            {
+                respuesta.codigo = HttpStatusCode.NotFound;
+                respuesta.mensajes.Add("Elemento no encontrado");
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPost]
+        public IHttpActionResult Crear(Paciente item)
+        {
+            var respuesta = new RespuestaVMR<long?>();
+
+            try
+            {
+                respuesta.datos = PacienteBLL.Crear(item);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPut]
+        public IHttpActionResult Actualizar(long id, PacienteVMR item)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                item.id = id;
+                PacienteBLL.Actualizar(item);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpDelete]
+        public IHttpActionResult Eliminar(List<long> ids)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                PacienteBLL.Eliminar(ids);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+
+    }
+}
+
+
+Web.config
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Para obtener más información sobre cómo configurar la aplicación ASP.NET, visite
+  https://go.microsoft.com/fwlink/?LinkId=301879
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+  </configSections>
+  <appSettings>
+  </appSettings>
+  <system.web>
+    <compilation debug="true" targetFramework="4.8" />
+    <httpRuntime targetFramework="4.8" />
+  </system.web>
+  <connectionStrings>
+    <add name="DbConexion" connectionString="metadata=res://*/Modelos.Model.csdl|res://*/Modelos.Model.ssdl|res://*/Modelos.Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=20210196-ASP\SQLEXPRESS;initial catalog=Hospital;persist security info=True;user id=sa;password=Zootropolis21$;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+  </connectionStrings>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" />
+        <bindingRedirect oldVersion="0.0.0.0-13.0.0.0" newVersion="13.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Web.Infrastructure" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-2.0.1.0" newVersion="2.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.9.0" newVersion="5.2.9.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Runtime.CompilerServices.Unsafe" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <entityFramework>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <system.webServer>
+    <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+  </system.webServer>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701;612;618" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008,40000,40008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </compilers>
+  </system.codedom>
+</configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
