@@ -1,0 +1,148 @@
+USE [Hospital]
+GO
+SET IDENTITY_INSERT [dbo].[Paciente] ON 
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (1, N'2121212100', N'Alfonso', N'Garcia', N'Enero', N'Plaza de los Toros 23', N'234543234', N'alfonsogarciaenero@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (2, N'2121212200', N'Alfonso', N'Garcia', N'Enero', N'Plaza de los Toros 23', N'234543234', N'alfonsogarciaenero@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (3, N'2222222200', N'Gabriela', N'Elsa', N'Irir', N'Calle de las monjas', N'234234234', N'gabriela@gmaill.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (4, N'2323232300', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (5, N'2424242400', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (6, N'2525252500', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (7, N'2626262600', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (8, N'2626262800', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (9, N'2727272700', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (10, N'2828282800', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (11, N'2929292900', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (12, N'2121212101', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (13, N'2222222201', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (14, N'2323232301', N'Gabriela', N'Elsa', N'Irir', N'Plaza Padron', N'234234234', N'gabi@gmail.com', 0)
+GO
+INSERT [dbo].[Paciente] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [direccion], [celular], [correoElectronico], [borrado]) VALUES (15, N'2424242401', N'Gaby', N'Evan', NULL, N'Plaza Castellana', N'987987987', N'g4bY@gmail.com', 0)
+GO
+SET IDENTITY_INSERT [dbo].[Paciente] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Medico] ON 
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (1, N'1111110000', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (2, N'1212120000', N'Dayana', N'Iorga', NULL, 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (3, N'1313130000', N'Pedro', N'Alonso', N'Asta', 1, 1, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (4, N'1414140000', N'Anthony', N'Iorga', NULL, 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (5, N'1515150000', N'Nicolae', N'Iorga', NULL, 1, 1, 1)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (6, N'1616160000', N'Fernando', N'Garcia', N'Oslo', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (7, N'1717170000', N'Gen', N'Isaias', N'Gan', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (8, N'1818180000', N'Gen', N'Isaias', N'Gan', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (9, N'1919190000', N'Gen', N'Isaias', N'Gan', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (10, N'1111110001', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (11, N'1111110002', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (12, N'1111110003', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (13, N'1111110004', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (14, N'1111110005', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (15, N'1111110006', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (16, N'1111110007', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+INSERT [dbo].[Medico] ([id], [cedula], [nombre], [apellidoPaterno], [apellidoMaterno], [esEspecialista], [habilitado], [borrado]) VALUES (17, N'1111110008', N'Elizabeth', N'Iorga', N'Blas', 0, 0, 0)
+GO
+SET IDENTITY_INSERT [dbo].[Medico] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Ingreso] ON 
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (1, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 1, 1, N'Gripe', NULL, 0, 1, 1)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (2, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 2, 1, N'Gripe', NULL, 0, 1, 2)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (3, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 3, 1, N'Gripe', NULL, 0, 1, 4)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (4, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 4, 1, N'Gripe', NULL, 0, 1, 5)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (5, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 5, 1, N'Gripe', NULL, 0, 1, 6)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (6, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 6, 1, N'Gripe', NULL, 0, 1, 7)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (7, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 7, 1, N'Gripe', NULL, 0, 2, 9)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (8, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 8, 1, N'Gripe', NULL, 0, 3, 1)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (9, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 9, 1, N'Gripe', NULL, 0, 4, 1)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (10, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 1, 2, N'Gripe', NULL, 0, 5, 1)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (11, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 2, 2, N'Gripe', NULL, 0, 2, 2)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (12, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 3, 2, N'Gripe', NULL, 0, 2, 2)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (13, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 4, 2, N'Gripe', NULL, 0, 2, 2)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (14, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 5, 2, N'Gripe', NULL, 0, 3, 2)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (15, CAST(N'2023-10-31T01:00:00.000' AS DateTime), 6, 2, N'Gripe', NULL, 0, 7, 1)
+GO
+INSERT [dbo].[Ingreso] ([id], [fecha], [numeroSala], [numeroCama], [diagnostico], [observacion], [borrado], [medicoId], [pacienteId]) VALUES (17, CAST(N'2023-10-31T00:00:00.000' AS DateTime), 7, 2, N'Gripe', NULL, 0, 2, 1)
+GO
+SET IDENTITY_INSERT [dbo].[Ingreso] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Egreso] ON 
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (1, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 1, 1)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (2, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 2, 9)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (3, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 3, 8)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (4, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 4, 7)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (5, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 5, 6)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (6, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 6, 5)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (7, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 7, 4)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (8, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 8, 3)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (9, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 9, 2)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (10, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 1, 8)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (11, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 2, 7)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (12, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 3, 6)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (13, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 4, 5)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (14, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 5, 4)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (15, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 6, 3)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (16, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 7, 5)
+GO
+INSERT [dbo].[Egreso] ([id], [fecha], [tratamiento], [monto], [borrado], [medicoId], [ingresoId]) VALUES (17, CAST(N'2023-10-31T00:00:00.000' AS DateTime), N'Paracetamol', CAST(10.00 AS Decimal(18, 2)), 0, 8, 1)
+GO
+SET IDENTITY_INSERT [dbo].[Egreso] OFF
+GO

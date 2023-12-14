@@ -1,0 +1,382 @@
+ANGULAR
+
+Entonces, ¿Angular es como una sustitución del HTML? ¿y que además tiene que estar enlazado con otro documento para que cuando le llegue algún dato en la segunda la primera lo recoja y escriba su contenido o plasmarla tan cual es?
+
+por lo visto en la segunda metemos los parámetros/datos y la segunda que importa tales lo va pintando... a probarla en una CARPETA_01_ANG
+
+
+---- LA ILUMINACION --- 
+
+Aaaaaah, entonces con Angular al crear un nuevo proyecto (por decir algo nuevo que creamos) se nos crea (en la carpeta que seleccionamos) 4 archivos 
+[
+	xxxxx.component.html 
+	xxxxx.component.spec.ts 
+	xxxxx.component.ts
+	xxxxx.component.css
+]
+
+==>	ng generate component
+==> 	(introducir nombre del componente {xxxxx})
+
+==> 	ng serve {para que funcione y recompile el proyecto en general}
+			[importante volverlo a lanzar para que siga sirviendo el local de proyecto de angular]
+
+
+
+IRÉ A COMER		15:54
+VUELTO 		16:24
+
+________________________________________________________________________________________
+En xxxxx.component.html
+
+::> podemos recoger los demás html (contenidos) llamándolos con las etiquetas <zzz> o <yyy>
+
+::> para darles condicionales metemos *ngIf="operation" en la etiqueta
+	[una especie de atributo para etiqueta html que permite aplicarle o dotarle una funcionalidad]
+	[hay más directivas como ngstyle o de atributo]
+
+::> para los estilos añadimos en las etiquetas [style.X]="parámetro/operacion con parámetro"
+	[este es un ejemplo de directiva de atributo]
+	[cuidado con poner una variable o un string]
+
+::> eventos son entre paréntesis (click)="aumentarEdad()
+	[llamar a una función o un método que estará en la clase del componente]
+_______________________________________________________________________________________
+En xxxxx.module.ts
+
+modulo principal donde está cargado los [componentes en declaration] [otros módulos en imports] [servicios en providers] [que componente será el principal o por el que se empezará a arrancar la aplicacion en boostrap]
+________________________________________________________________________________________
+En xxxxx.component.ts
+
+componente inicial .ts [primero la importacion del objeto Component del core de angular que nos permite utilizar el decorador para definir ese componente] 
+{Decorador: nos permite aplicar una serie de atributos y características a una clase}
+
+::> [selector nos vincula a la etiqueta correspondiente y es personalizable] {crea una nueva especie de etiqueta para el html}
+
+::> [templateUrl es el html vinculado a este componente {punto medio entre el modelo de datos y la vista acuerdo cual es un soporte para la vista que va a implementar una serie de funcionalidades} ]
+
+::> [styleUrls es la hoja de estilo al cual está vinculada]
+
+::> [las propiedades de la clase que se pasan a la vista] (de esa forma en el .html {{variable}})
+
+
+
+
+2023/09/27 Continuacion de Angular
+
+
+A la hora de crear un nuevo proyecto dentro del directorio establecido se crearán varios archivos. Los que vamos a ver de momento es el directorio ==> src <== donde estaremos haciendo la parte de frontend. Aquí encontraremos el index.html con una etiqueta <app-root> (ubicación donde irán a parar todo el html que crearemos en angular)
+
+
+
+__________________________________________
+Nuevos componentes
+
+Para ello cerramos la ejecución de nuestro proyecto en caso de haberlo compilado. 
+==> CTRL+C (cortar la ejecución)
+==> ng generate component (a continuacion nos preguntará nombre del componente)
+
+Al terminar automáticamente se creará un directorio, los archivos y actualizará el modulo del componente principal. [en declaration se agrega el nombre del componente sino no será reconocido en el proyecto de angular, se importa la clase componente y cargando el objeto dentro de declarations]
+
+
+::> Es mejor darle valor a los atributos dentro del constructor. [this.atributo (nos referimos al atributo de la clase actual y le ponemos una propiedad)]
+
+::> ngOnInit() [es uno de los hugs o métodos de ciclo de vida de componentes que automáticamente al cargar un componente lanza directamente este primer método ]
+		1. se ejecuta el constructor
+		2. se ejecuta el OnInit
+		3. se ejecuta otros métodos
+
+
+En Angular podemos tener un array de elementos
+--> en el constructor definimos el atributo como -> nombre: Array<type> <- 
+--> en la vista podemos traer la propiedad con -> nombre[índice]
+
+
+Forma reactiva un formulario, hacer una app web con rooting dinámico, peticiones asíncrona, etc
+
+
+_______________________________________________________-
+Nuevo video = más datos
+***********************************************************************************
+**ficheros**
+
+los archivos ts son archivos de configuracion de typescript que usaremos dentro de Angular, es como una mejora de javascript
+
+package.json [archivo donde configuramos version de framework, diferente comando y las dependencias y librerías del proyecto. Si instalamos algún paquete se irá en las -dependencias-]
+
+package-lock.json [se genera cada vez que instalamos algún modulo de node, etc]
+
+karma [fichero para configurar temas de pruebas ]
+
+angular.json [sirve para configurar proyecto en general y sobretodo para cargar scripts, assets, librerias externas al framework. Básicamente un fichero de configuración general del framework]
+
+.gitignore [en el repositorio de git indicamos que ficheros no queremos que se guarde para que no suba al servidor]
+
+.editorconfig [fichero de configuración para el editor]
+***********************************************************************************
+**carpetas**
+
+e2e [es para testing]
+
+node_modules [sonde se guardan todas las dependencias, librerias, el frameworks, paquetes de node ]
+
+src [es donde estarán los componentes con los cuales trabajaremos]
+
+**DENTRO DE SRC**
+
+main.ts [archivo principal de typescript donde se carga todo el tema de componentes y carga el módulo principal del framework]
+
+index.html [plantilla principal o html principal donde todo se carga gento de este. Todo lo que iremos haciendo esta en el app-root una etiqueta que es el componente que carga otros componentes y dan la forma al proyecto ]
+
+text.ts/style.css/favicon.ico
+
+environments [es para configurar los diferentes entornos de desarrollo]
+
+app [donde tenemos diferentes componentes, por defecto el app]
+***DENTRO DE APP*
+tenemos el módulo principal que se encargará de cargar los diferentes componentes y poder usarlo en la aplicacion en general. Podemos crear varios módulos separados, uno para la parte de backoffice, foro, aplicación principal, etc. 
+
+component.ts que viene por defecto
+***********************************************************************************
+Conocer más sobre los COMPONENTES
+
+Aplicaciones creadas con Angular son aplicaciones orientadas a componentes, todo lo mostrado y lo que hacemos es un componente, un trozo de pantalla de la aplicación. Una app web está formada por muchísimos componentes y su conjunto es un componente.
+
+app.component.css []
+app.component.html [las propiedades las podemos llamar con {{propiedad}}, sirve para imprimir en una vista ]
+app.component.spec.ts [es para hacer test]
+app.component.ts [es una clase de javascript, 
+			import del component que es una clase que viene del core de angular
+			@Component es un decorador, es una funcionalidad que se aplica a una clase y que modifica el comportamiento al final que tiene la clase. Indica las caracteristicas de propiedades de este componente.
+				selector [nombre de la etiqueta html que usaremos o la directiva]
+				templateUrl []
+				styleUrls
+			Clase ==> La funcionalidad y la lógica principal estará en la clase del componente, se exporta e importa en otros componentes 
+				podemos definir diferentes propiedades (public/protected/private)
+				podemos indicar el tipo de propiedad (:string, :number, :boolean, :null, :void, :undefined, : any)
+				a los array debemos poner su tipo 
+				contructor [le damos valor a las propiedades ]
+			]
+app.module.ts [
+			aqui obligatoriamente se deben importar todos los componentes
+			cargar configuraciones para el modulo (la aplicacion completa)
+			importamos y declaramos un componente para poder usarlo en cualquier parte de la app
+			todos los componentes están cargados de manera global. ¿Que significa? Pues un componente, además del principal, puede interiorizar otros componentes 
+		]
+
+
+aunque podamos crear los archivos componentes de forma manual, angular cli nos facilita ese trabajo repetitivo. Para ello en el compilador/consola debemos estar dentro del directorio donde instalamos el angular y escribir. De forma que podemos manejar multiples componentes.
+	ng generate component
+	ng g c
+Si queremos volver a lanzar el proyecto
+	ng serve [compila la aplicacion, ejecutarla, laza el servidor local]
+	ng serve -o [abrir directamente el servidor]
+
+
+::> Interporar un dato es coger el dato y mostrar la propiedad en la vista
+	binding por interpolación [unir una propiedad con lo que vemos en la vista]
+
+[IMPORTANTE] : siempre hay que ver en el compilador/consola para los errores o cuando no funciona
+
+
+
+
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+________________________________________________________________________________________
+COMO CONSUMIR UNA API RESTFul CON ANGULAR
+
+ng generate component home [donde iremos a poner la programación que mostraremos en la web]
+ng generate service/api [creamos el api de servicio]
+
+==> primero tener un componente nuevo [este caso home]
+==> app.routing.module.ts
+	en routes añadimos la nueva ruta api, un path con ruta inicio (este caso HomeComponent)
+	==> path: '', component: HomeComponent
+	[ya tenemos enrutado la ruta inicial de la web nuestro componente]
+==> app.module.ts
+	importamos el módulo de HttlClientModule de la carpeta common el http de angular
+	agregar en la seccion de imports
+	[nos permitirá ejecutar métodos http dentro de nuestro servicio]
+	[lo dejamos ya]
+==> crear un servicio
+	ng g s service/api [creará una carpeta service con los archivos api.service]
+	api.service.ts [ejecutar y escribir comandos para llamar a nuestra api]
+		definimos una url que será la direccion de la api
+		constructor
+			llamamos a la clase HttpClient 
+		creamos método -> getData(): Observable<any>
+			[este retornará un tipo objeto Observable que sea any]
+			[como es una api genérica, no sabemos su tipo, ponemos <any>]
+			return this.http.get<any>(this.urlApi);
+		importamos el módulo Observable del paquete rxjs
+==> home.component.ts
+	creamos una variable de tipo any y nos devuelva un array [crear, definir e inicializar]
+	como no sabemos de que tipo vendrán los objetos de la api, la definimos any
+[IMPORTANTE]: si hay {} y no es un array, no es un conjunto de datos sino solo un OBJETO
+	creamos un método llenarData()
+		[donde escribiremos la programación que llamará a la API]
+	añadimos en ngOnInit() => this.llenarData()
+		[cuando se ejecute el componente,se renderiza, se ejecuta el ngOnInit y llamará a las funciones/métodos internas]
+	en constructor 
+		llamamos a la Clase ApiService en nuestro apiService
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+________________________________________________________________________________________
+SUBIR IMAGEN A LA API
+
+
+
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+________________________________________________________________________________________
+ENVIAR UN COMPONENTE A OTRO COMPONENTE
+
+
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+________________________________________________________________________________________
+ARRAY Y OBJETOS
+
+
+arrayPrueba: any [] = ["naturo", "sasuke", "sakura"];
+
+
+==> arrayPrueba			devuelve	'naruto','sasuke','sakura'
+==> arrayPrueba[0]		devuelve	'naruto'
+==> arrayPrueba | json		devuelve	["naturo", "sasuke", "sakura"]
+
+
+objetoPrueba = { nombre: "Naruto", elemento: "viento" };
+
+
+==> objetoPrueba			devuelve	[object Object]
+==> objetoPrueba.elemento		devuelve	viento
+==> objetoPrueba.elemento | json	devuelve	"viento"
+==> objetoPrueba | json			devuelve	{ "nombre": "Naruto", "elemento": "viento" }
+
+
+arrayObjeto: any[] = [{ id: "1", nr: "10" },{ id: "2", nr: "20" },{ id: "3", nr: "30" }];
+
+
+==> arrayObjeto			devuelve	[object Object],[object Object],[object Object]
+==> arrayObjeto[0]		devuelve	[object Object]
+==> arrayObjeto[0] | json	devuelve	{ id: "1", nr: "10" }
+==> arrayObjeto[1].nr		devuelve	20
+==> arrayObjeto | json		devuelve	[	{ "id": "1", "nr": "10" },
+						{ "id": "2", "nr": "20" },
+						{ "id": "3", "nr": "30" }	]
+
+[| json] === [trae toda la info del obj]
+[un arreglo de objetos]
+
+JSON [ES SOLO TEXTO ESTRUCTURADO] ==== ejemplo de json
+{
+	"nameAldea":"Aldea De La Hoja";
+	"objSensei": {
+			"nombre":""
+			"sexo":true;
+			};
+	"listaPerson":["persona1","persona2","persona3"];
+	"listaInmigrantes": [
+				{
+					"pais":"argentina",
+					"cantidad":100
+				}
+				{
+					"pais":"argentina",
+					"cantidad":100
+				}
+			     ]
+}
+
+nameAldea: string
+objSensei: Senseis 	osea un objeto
+listaPerson: string[]	un arreglo
+
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+________________________________________________________________________________________
+PARA EL MOMENTO DE CREAR UN PROYECTO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[DOM TYPESCRIPT]		https://runebook.dev/es/docs/typescript/dom-manipulation
+
+[PAGINA JSON-ANGULAR]		https://app.quicktype.io/
+
+[URL API USADA]			https://rickandmortyapi.com/
+
+[CREAR API]			https://www.youtube.com/watch?v=5T9a2AmbmJE
+[CONSTRUIR API RESTFul]		https://www.ma-no.org/es/programacion/como-construir-una-api-restful-guia-paso-a-paso
+
+:::::> COMO INSTALAR ANGULAR
+https://www.youtube.com/watch?v=vj7sVq7HRHs
+:::::> PAGINA DE ANGULAR
+https://angular.io/guide/setup-local
+
+
+
+[CANAL PRINCIPAL]		https://www.youtube.com/@alonsonavastack/videos
+[CANAL PRINCIPAL]		https://www.youtube.com/@LeiferMendez
+
+[001 ANGULAR - 	INSTALACION]	https://www.youtube.com/watch?v=9iF_ap4fjlc	tick
+[002 ANGULAR - VERSIONES]	https://www.youtube.com/watch?v=3y_lqyzOtzc	tick
+[003 ANGULAR - CREAR API]	https://www.youtube.com/watch?v=RUc-IzGJMgc	tick
+[004 ANGULAR - ARRAY/OBJETO] 	https://www.youtube.com/watch?v=0hCjQItFE-4	tick
+[005 ANGULAR - JSON ]		https://www.youtube.com/watch?v=hATzBtec_D8	tick
+
+[API REST]			https://www.youtube.com/watch?v=ooAmdvpAE-o&list=PLIbWwxXce3VqQxabv3aT0nHnhHQH6F-qG&index=1
+
+
+VIDEOS LARGOS
+
+
+[CURSO PRACTICO]		https://www.youtube.com/watch?v=AR1tLGQ7COs
+[API REST POKEMON]		https://www.youtube.com/watch?v=lKCWH4Jma8E
+
+
+
+[ANGULAR CREA APP]		https://www.youtube.com/watch?v=4J1onUTl--8&pp=ygUtY29tbyBib3JyYXIgYXJjaGl2b3MgbyBkaXJlY3RvcmlvcyBlbiBhbmd1bGFy
+	
+[SUBIR IMAGEN]			https://www.youtube.com/watch?v=8GJgfk1rFUQ
+
+
+
+
+
+
+

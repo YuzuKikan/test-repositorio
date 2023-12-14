@@ -1,0 +1,197 @@
+TAREA IMPORTANTE 2
+
+Se conecta con distintos lenguajes de programación PHP Python Javascript etc.
+Dentro de los software de gestión de base de datos son C R U D [lo veremos en todas las operaciones que construiremos]
+	C 	create			crear un repositorio
+	R 	read(select)		leer uno o más registros
+	U 	update			actualizar
+	D 	delete			eliminar 
+
+Para realizar estas acciones debemos escribir un query/consulta.
+Voy a realizar una petición o pregunta al software de gestión de bases de datos de si puede crear el recurso que estoy indicando que crea.
+
+Consulta : 	buscando en google, ver fotos, ver perfil, etc
+
+
+
+
+AMAZON --> software de Relacional Data Best management System --> BASE DE DATOS --> va a RDBMS --> WEB
+
+
+Gestion de Base de Datos
+	1. implementa SQL [Bases de Datos Relacionales]
+		guardan los datos en TABLA compuestas por filas y columnas
+			Filas		hay un identificador único generada de manera automática que creamos en un registro y puede ser autoincremental
+			Columnas	referencia al dato mismo que guarda
+		por lo tanto, tenemos la TABLA, COLUMNAS, DATOS, REGISTRO(la fila de datos)
+
+	2. No-SQL [todos los demás]
+		distintos formatos 	json	bson	blob	...	key-value
+
+
+
+Tabla usuarios ---> no estaba asociado a nada, es de las más importantes ya que mediante esta tabla podemos asignar nuevos registros que se creen a alguien. 
+Tabla administrador ---> puede crear productos dentro de un software
+
+id:   primary key	clave de misma	-- PRIMARY KEY (id)
+      foreign key 	clave de otra	-- FOREING KEY(created_by) REFERENCES nameDB(id)
+
+____________________________________________________________________________
+____________________________________________________________________________
+Tanto el MySQL, SQL Server y tal son solo heramientas 
+Al tener la herramienta nos toca crear nuestra BD encargada de contener todas las tablas
+
+
+create database nameBD
+
+para ver el registro de todas las bases de datos 	show databases;
+	no solo aparecerá nuestros BD pero solo nos interesarán esos
+CREATE TABLE animales (
+	id int,
+	tipo varchar(255)
+	estado varchar(255)
+	PRIMARY KEY (id)
+);
+
+	tipos de valores (Int, Float, varchar)
+____________________________________________________________________________
+____________________________________________________________________________
+Nuestra consulta no sabe que base de datos utilizar, por ello 	
+Antes de efectuar la consulta debemos indicar en que BD debe ir.
+
+	USE nameBD
+
+Insertar datos en la tabla,  
+	INSERT INTO animales(tipo, estado) VALUE ('chanchito','feliz');
+____________________________________________________________________________
+____________________________________________________________________________
+Modificamos en la tabla creada la columna de id para que sea autoincrementable.
+	ALTER TABLE nameDB MODIFY COLUMN id int auto_increment 
+	
+	SHOW CREATE TABLE animales [muestra como se crea la tabla animales]
+
+CREATE TABLE 'animales'(
+	'id' INT NOT NULL AUTO_INCREMENT,
+	'tipo' VARCHAR(255) DEFAUTL NULL,
+	'estado' VARCHAR(255) DEFAULT NULL,
+	PRIMARY KEY ('id')
+) 
+____________________________________________________________________________
+____________________________________________________________________________
+Como listar todos los registros ingresados
+
+SELECT (seleccionar los elementos de una tabla)
+UPDATE ()
+DELETE ()
+
+
+
+SELECT * FROM user LIMIT 1 [limita la cantidad de registros a mostrar]
+
+
+>=	>
+AND 	OR
+!= 
+BETWEEN XXX AND ZZZ
+LIKE 	'%XXX%'		[busca en el campo sin importar el inicio y final de cadena]
+	'%gmail'	[tiene que terminar con ese término]
+
+ORDER BY id ASC 	DESC
+
+____________________________________________________________________________
+____________________________________________________________________________
+DARLE ALIAS A LAS COLUMNAD 		SELECT id, name AS nombre FROM user;
+____________________________________________________________________________
+____________________________________________________________________________
+UNIR UNA TABLA CON OTRA
+
+SELECT u.id, u.email, p.name FROM user u LEFT JOIN product p ON u.id = p.created_by;
+					 RIGHT JOIN 
+					 INNER JOIN	
+	[entrega los registros que comprenden entre ambas]
+
+
+SELECT u.id, u.email, p.name, p.id, p.name FROM user u CROSS JOIN product p;
+	[entrega el producto cartesiano de ambas tablas]
+	[cuidado ya que los registros que devolverá será excesiva]
+
+SELECT COUNT(p.id), u.name FROM product p LEFT JOIN user u on u.id=p.created_by GROUP BY p.created_by;
+	(aparece la cantidad de productos que ha echo cada usuario)
+	[al añadir HAVING count(p.id) >= 2 	solo mostrará los datos que buscamos] 
+
+
+DROP TABLE nameTable; 	[elimina la tabla]
+____________________________________________________________________________
+CARDINALIDAD
+se refiere a la relacion que tienen unas tablas con las otras 	1:N	N:M
+ 
+____________________________________________________________________________
+MODELO ENTIDAD RELACION --- GRÁFICAS ---
+
+Tenemos varias heramientas y plantillas que nos facilita crear tablar y tal.
+Así podemos modelar la tabla con unos clicks.
+Para obtener la consulta SQL de la tabla podemos copiar con la opcion *click dcha* y pegar, obteniendo una sintaxis completa.
+
+IF NOT EXIST [en el caso que no exista la tabla en BD pues que haga la accion]
+UNIQUE INDEX [toma cierto campo y lo guarda en memoria]
+
+Para Foreing Key hay una opcion para decir cual es la clave y a cual se referencia
+
+Es importante que no haya tanta duplicidad de los datos
+
+Para llevarnos este modelo de entidad relacion a una única consulta vamos a exportarlo en formato sql en el apartado de FILE
+____________________________________________________________________________
+____________________________________________________________________________
+Renombrar 	RENAME TABLE products TO product
+
+
+____________________________________________________________________________
+____________________________________________________________________________
+MODELAMIENTO DE BASE DE DATOS
+
+
+____________________________________________________________________________
+____________________________________________________________________________
+
+
+
+
+____________________________________________________________________________
+____________________________________________________________________________
+¿Quién usa la gestión de bases de datos? 	
+
+ANGULAR	tutoImgagen	https://www.youtube.com/watch?v=8GJgfk1rFUQ
+
+SQL	install		https://www.youtube.com/watch?v=SqZQffksa0w
+
+SQL 	curso		https://www.youtube.com/watch?v=yLoh2sSDECw
+
+SQL	curso		https://www.youtube.com/watch?v=uUdKAYl-F7g
+
+ANGULAR	curso		https://www.youtube.com/watch?v=EjbUmLhdjDg
+
+SQL	curso		https://www.youtube.com/watch?v=-Ws-JXV2kew&pp=ygUmY29tbyB1c2FyIHNxbCBzZXJ2ZXIgbWFuYWdlbWVudCBzdHVkaW8%3D
+
+SQL	INTRO		https://www.youtube.com/watch?v=VB5aJYtmZ70
+
+MySQL	curso		https://www.youtube.com/watch?v=96s2i-H7e0w
+
+INFRO	SQL/NoSQL	https://www.youtube.com/watch?v=8K1PKSqHFRQ
+
+
+
+
+Los servicios de Alten desde las 9:15 a 11:20
+El apartado de idioma de AulaStreaming es bastante buena informando con los tutoriales. El problema son las páginas web donde se desarrollan las actividades, en estas no puedo iniciar sesión aún. 
+AltenINSIDE, WOFFU y goFluent no puedo iniciar sesión.
+
+
+
+
+A LAS 15:00 empecé a ver el funcionamiento de la herramienta SQL Server Managment Studio
+
+
+
+
+
+

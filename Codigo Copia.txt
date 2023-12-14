@@ -1,0 +1,937 @@
+CONTEXTO - SB CONEXION
+
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Modelo.Modelos
+{
+    public partial class DbConexion : DbContext
+    {
+        private DbConexion(string stringConexion) : base(stringConexion)
+        {
+            this.Configuration.LazyLoadingEnabled = false;
+            this.Configuration.ProxyCreationEnabled = false;
+            this.Database.CommandTimeout = 900;
+        }
+        public static DbConexion Create()
+        {
+            return new DbConexion("name=DbConexion");
+        }
+    }
+}
+
+
+
+METADATOS --- EGRASO
+
+namespace Modelo.Modelos
+{
+    [MetadataType(typeof(EgresoMetadato))]
+    public partial class Egreso
+    {
+    }
+    public class EgresoMetadato
+    {
+        [Required]
+        public System.DateTime fecha { get; set; }
+        [Required]
+        [Range(0, 9999999999999999.99)]
+        public decimal monto { get; set; }
+        [Required]
+        public long medicoId { get; set; }
+        [Required]
+        public long ingresoId { get; set; }
+    }
+}
+
+namespace Modelo.Modelos
+{
+    [MetadataType(typeof(IngresoMetadato))]
+    public partial class Ingreso
+    {
+    }
+
+    public class IngresoMetadato
+    {
+        [Required]
+        public System.DateTime fecha { get; set; }
+        [Required]
+        public int numeroSala { get; set; }
+        [Required]
+        public int numeroCama { get; set; }
+        [Required]
+        public string diagnostico { get; set; }
+        [Required]
+        public long medicoId { get; set; }
+        [Required]
+        public long pacienteId { get; set; }
+    }
+}
+
+
+namespace Modelo.Modelos
+{
+    [MetadataType(typeof(MedicoMetadato))]
+    public partial class Medico
+    {
+    }
+    public class MedicoMetadato
+    {
+        [Required]
+        [StringLength(10)]
+        public string cedula { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string nombre { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string apellidoPaterno { get; set; }
+        [StringLength(50)]
+        public string apellidoMaterno { get; set; }
+        [Required]
+        public bool esEspecialista { get; set; }
+        [Required]
+        public bool habilitado { get; set; }
+    }
+}
+
+
+namespace Modelo.Modelos
+{
+    [MetadataType(typeof(PacienteMetadato))]
+    public partial class Paciente
+    {
+    }
+    public class PacienteMetadato
+    {
+        [Required]
+        [StringLength(10)]
+        public string cedula { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string nombre { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string apellidoPaterno { get; set; }
+        [StringLength(50)]
+        public string apellidoMaterno { get; set; }
+        [Required]
+        [StringLength(500)]
+        public string direccion { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string celular { get; set; }
+        [Required]
+        [StringLength(50)]
+        [EmailAddress]
+        public string correoElectronico { get; set; }
+    }
+}
+
+
+====================================================================================================================================================================
+COMUN
+
+
+namespace Comun.ViewModels
+{
+    public class EgresoVMR
+    {
+        public long id { get; set; }
+        public System.DateTime fecha { get; set; }
+        public string tratamiento { get; set; }
+        public decimal monto { get; set; }
+        public long medicoId { get; set; }
+        public long ingresoId { get; set; }
+    }
+}
+
+namespace Comun.ViewModels
+{
+    public class IngresoVMR
+    {
+        public long id { get; set; }
+        public System.DateTime fecha { get; set; }
+        public int numeroSala { get; set; }
+        public int numeroCama { get; set; }
+        public string diagnostico { get; set; }
+        public string observacion { get; set; }
+        public long medicoId { get; set; }
+        public long pacienteId { get; set; }
+    }
+}
+
+namespace Comun.ViewModels
+{
+    public class ListadoPaginadoVMR<T>
+    {
+        public int cantidadTotal { get; set; }
+        public IEnumerable<T> elemento { get; set; }
+        public ListadoPaginadoVMR()
+        {
+            elemento  = new List<T>();
+            cantidadTotal = 0;
+        }
+    }
+}
+
+
+namespace Comun.ViewModels
+{
+    public class MedicoVMR
+    {
+        public long id { get; set; }
+        public string cedula { get; set; }
+        public string nombre { get; set; }
+        public string apellidoPaterno { get; set; }
+        public string apellidoMaterno { get; set; }
+        public bool esEspecialista { get; set; }
+        public bool habilitado { get; set; }
+    }
+}
+
+namespace Comun.ViewModels
+{
+    public class PacienteVMR
+    {
+        public long id { get; set; }
+        public string cedula { get; set; }
+        public string nombre { get; set; }
+        public string apellidoPaterno { get; set; }
+        public string apellidoMaterno { get; set; }
+        public string direccion { get; set; }
+        public string celular { get; set; }
+        public string correoElectronico { get; set; }
+    }
+}
+
+namespace Comun.ViewModels
+{
+    public class RespuestaVMR<T>
+    {
+        public HttpStatusCode codigo { get; set; }
+        public T datos { get; set; }
+        public List<string> mensajes { get; set; }
+        public RespuestaVMR()
+        {
+            codigo = HttpStatusCode.OK;
+            datos = default(T);
+            mensajes = new List<string>();
+        }
+
+    }
+}
+
+
+
+
+
+====================================================================================================================================================================
+
+ACCESO A DATOS
+
+namespace Datos.DAL
+{
+    public class EgresoDAL
+    {
+        public static ListadoPaginadoVMR<EgresoVMR> LeerTodo(int cantidad, int pagina, string textoBusqueda)
+        {
+            return null;
+        }
+        public static EgresoVMR LeerUno()
+        {
+            EgresoVMR item = null;
+
+            return item;
+        }
+        public static long Crear(Paciente item)
+        {
+            long id = 0;
+            return id;
+        }
+        public static void Actualizar()
+        {
+        }
+        public static void Eliminar()
+        {
+
+        }
+    }
+}
+
+
+namespace Datos.DAL
+{
+    public class IngresoDAL
+    {
+        public static ListadoPaginadoVMR<IngresoVMR> LeerTodo(int cantidad, int pagina, string textoBusqueda)
+        {
+            ListadoPaginadoVMR<IngresoVMR> resultado = new ListadoPaginadoVMR<IngresoVMR>();
+
+            using (var db = DbConexion.Create())
+            {
+                var query = db.Ingreso.Where(x => !x.borrado).Select(x => new IngresoVMR
+                {
+                    id = x.id,
+                    fecha = x.fecha,
+                    numeroSala=x.numeroSala,
+                    numeroCama=x.numeroCama,
+                    diagnostico = x.diagnostico,
+                    observacion = x.observacion,
+                    medicoId = x.medicoId,
+                    pacienteId = x.pacienteId
+                });
+
+               /* if (!string.IsNullOrEmpty(textoBusqueda))
+                {
+                    query = query.Where(x => x.cedula.Contains(textoBusqueda) || x.nombre.Contains(textoBusqueda));
+                }*/
+                resultado.cantidadTotal = query.Count();
+
+                resultado.elemento = query.OrderBy(x => x.id).Skip(pagina * cantidad).Take(cantidad).ToList();
+            }
+
+            return resultado;
+        }
+        public static IngresoVMR LeerUno()
+        {
+            IngresoVMR item = null;
+
+            return item;
+        }
+        public static long Crear(Paciente item)
+        {
+            long id = 0;
+            return id;
+        }
+        public static void Actualizar()
+        {
+        }
+        public static void Eliminar()
+        {
+
+        }
+    }
+
+    
+}
+
+
+namespace Datos.DAL
+{
+    public class MedicoDAL
+    {
+        public static ListadoPaginadoVMR<MedicoVMR> LeerTodo(int cantidad, int pagina, string textoBusqueda)
+        {
+            ListadoPaginadoVMR<MedicoVMR> resultado = new ListadoPaginadoVMR<MedicoVMR>();
+
+            using (var db = DbConexion.Create())
+            {
+                var query = db.Medico.Where(x => !x.borrado).Select(x => new MedicoVMR
+                {
+                    id = x.id,
+                    cedula = x.cedula,
+                    nombre = x.nombre + " " + x.apellidoPaterno + (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False "),
+                    esEspecialista = x.esEspecialista
+                });
+                if (!string.IsNullOrEmpty(textoBusqueda))
+                {
+                    query = query.Where(x => x.cedula.Contains(textoBusqueda) || x.nombre.Contains(textoBusqueda));
+                }
+                resultado.cantidadTotal = query.Count();
+
+                resultado.elemento = query.OrderBy(x => x.id).Skip(pagina * cantidad).Take(cantidad).ToList();
+            }
+
+            return resultado;
+        }
+
+        public static MedicoVMR LeerUno(long id)
+        {
+
+            MedicoVMR item = null;
+
+            using (var db = DbConexion.Create())
+            {
+                item = db.Medico.Where(x => !x.borrado && x.id == id).Select(x => new MedicoVMR
+                {
+                    id = x.id,
+                    cedula = x.cedula,
+                    nombre = x.nombre,
+                    apellidoPaterno = x.apellidoPaterno,
+                    apellidoMaterno = x.apellidoMaterno,
+                    habilitado = x.habilitado,
+                    esEspecialista = x.esEspecialista
+                }).FirstOrDefault();
+            }
+
+            return item;
+        }
+
+        public static long Crear(Medico item)
+        {
+            using (var db = DbConexion.Create())
+            {
+                item.borrado = false;
+                db.Medico.Add(item);
+                db.SaveChanges();
+            }
+            return item.id;
+        }
+
+        public static void Actualizar(MedicoVMR item)
+        {
+            using (var db = DbConexion.Create())
+            {
+                var itemUpdate = db.Medico.Find(item.id);
+
+                itemUpdate.cedula = item.cedula;
+                itemUpdate.nombre = item.nombre;
+                itemUpdate.apellidoPaterno = item.apellidoPaterno;
+                itemUpdate.apellidoMaterno = item.apellidoMaterno;
+                itemUpdate.habilitado = item.habilitado;
+                itemUpdate.esEspecialista = item.esEspecialista;
+
+                db.Entry(itemUpdate).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+        }
+        public static void Eliminar(List<long> ids)
+        {
+            using (var db = DbConexion.Create())
+            {
+                var items = db.Medico.Where(x => ids.Contains(x.id));
+
+                foreach (var item in items)
+                {
+                    item.borrado = true;
+                    db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                }
+
+                db.SaveChanges();
+            }
+        }
+    }
+}
+
+
+namespace Datos.DAL
+{
+    public class PacienteDAL
+    {
+        public static ListadoPaginadoVMR<PacienteVMR> LeerTodo(int cantidad, int pagina, string textoBusqueda)
+        {
+            ListadoPaginadoVMR<PacienteVMR> resultado = new ListadoPaginadoVMR<PacienteVMR>();
+
+            using(var db = DbConexion.Create())
+            {
+                var query = db.Paciente.Where(x => !x.borrado).Select(x => new PacienteVMR
+                {
+                    id = x.id,
+                    cedula = x.cedula,
+                    nombre = x.nombre + " " + x.apellidoPaterno + (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False "),
+                    direccion = x.direccion,
+                    celular = x.celular,
+                    correoElectronico = x.correoElectronico
+                });
+
+                if (!string.IsNullOrEmpty(textoBusqueda))
+                {
+                    query = query.Where(x => x.cedula.Contains(textoBusqueda) || x.nombre.Contains(textoBusqueda));
+                }
+                resultado.cantidadTotal = query.Count();
+                
+                resultado.elemento = query.OrderBy(x => x.id).Skip(pagina * cantidad).Take(cantidad).ToList();
+            }
+
+            return resultado;
+        }
+        public static PacienteVMR LeerUno(long id)
+        {
+            PacienteVMR item = null;
+
+            using(var db = DbConexion.Create())
+            {
+                item = db.Paciente.Where(x => !x.borrado && x.id == id).Select(x => new PacienteVMR
+                {
+                    id = x.id,
+                    cedula = x.cedula,
+                    nombre = x.nombre,
+                    apellidoPaterno = x.apellidoPaterno,
+                    apellidoMaterno = x.apellidoMaterno,
+                    direccion = x.direccion,
+                    celular = x.celular,
+                    correoElectronico = x.correoElectronico
+                }).FirstOrDefault();
+            }
+
+            return item;
+        }
+        public static long Crear(Paciente item)
+        {
+            long id = 0;
+            using(var db = DbConexion.Create())
+            {
+                item.borrado = true;
+                db.Paciente.Add(item);
+                db.SaveChanges();
+            }
+            return id;
+        }
+        public static void Actualizar(PacienteVMR item)
+        {
+            using (var db = DbConexion.Create())
+            {
+                var itemUpdate = db.Paciente.Find(item.id);
+
+                itemUpdate.cedula = item.cedula;
+                itemUpdate.nombre = item.nombre;
+                itemUpdate.apellidoPaterno = item.apellidoPaterno;
+                itemUpdate.apellidoMaterno = item.apellidoMaterno;
+                itemUpdate.direccion = item.direccion;
+                itemUpdate.celular = item.celular;
+                itemUpdate.correoElectronico = item.correoElectronico;
+
+                db.Entry(itemUpdate).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+        public static void Eliminar(List<long> ids)
+        {
+            using (var db = DbConexion.Create())
+            {
+                var items = db.Paciente.Where(x => ids.Contains(x.id));
+
+                foreach(var item in items)
+                {
+                    item.borrado = true;
+                    db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                }
+
+                db.SaveChanges();
+            }
+        }
+    }
+}
+
+====================================================================================================================================================================
+
+LOGICA DE NEGOCIO
+
+
+namespace Logica.BLL
+{
+    public class MedicoBLL
+    {
+        public static ListadoPaginadoVMR<MedicoVMR> LeerTodo(int cantidad, int pagina, string textoBusqueda)
+        {
+            return MedicoDAL.LeerTodo(cantidad, pagina, textoBusqueda);
+        }
+        public static MedicoVMR LeerUno(long id)
+        {
+            return MedicoDAL.LeerUno(id);
+        }
+        public static long Crear(Medico item)
+        {
+            return MedicoDAL.Crear(item);
+        }
+        public static void Actualizar(MedicoVMR item)
+        {
+             MedicoDAL.Actualizar(item);
+        }
+        public static void Eliminar(List<long> ids)
+        {
+             MedicoDAL.Eliminar(ids);
+        }
+    }
+}
+
+
+
+namespace Logica.BLL
+{
+    public class PacienteBLL
+    {
+        public static ListadoPaginadoVMR<PacienteVMR> LeerTodo(int cantidad, int pagina, string textoBusqueda)
+        {
+            return PacienteDAL.LeerTodo(cantidad, pagina, textoBusqueda);
+        }
+        public static PacienteVMR LeerUno(long id) 
+        {
+            return PacienteDAL.LeerUno(id);
+        }
+        public static long Crear(Paciente item) 
+        {
+            return PacienteDAL.Crear(item);
+        }
+        public static void Actualizar(PacienteVMR item) 
+        {
+             PacienteDAL.Actualizar(item);
+        }
+        public static void Eliminar(List<long> ids) 
+        {
+              PacienteDAL.Eliminar(ids);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+====================================================================================================================================================================
+
+CONTROLLERS
+
+
+namespace WebAPI.Controllers
+{
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    public class MedicoController : ApiController
+    {
+        [HttpGet]
+        public IHttpActionResult LeerTodo(int cantidad = 10, int pagina = 0, string textoBusqueda = null)
+        {
+            var respuesta = new RespuestaVMR<ListadoPaginadoVMR<MedicoVMR>>();
+
+            try
+            {
+                respuesta.datos = MedicoBLL.LeerTodo(cantidad, pagina, textoBusqueda);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpGet]
+        public IHttpActionResult LeerUno(long id)
+        {
+            var respuesta = new RespuestaVMR<MedicoVMR>();
+
+            try
+            {
+                respuesta.datos = MedicoBLL.LeerUno(id);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+
+            if (respuesta.datos == null && respuesta.mensajes.Count() == 0)
+            {
+                respuesta.codigo = HttpStatusCode.NotFound;
+                respuesta.mensajes.Add("Elemento no encontrado");
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPost]
+        public IHttpActionResult Crear(Medico item)
+        {
+            var respuesta = new RespuestaVMR<long?>();
+
+            try
+            {
+                respuesta.datos = MedicoBLL.Crear(item);
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpPut]
+        public IHttpActionResult Actualizar(long id, MedicoVMR item)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                item.id = id;
+                MedicoBLL.Actualizar(item);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+        [HttpDelete]
+        public IHttpActionResult Eliminar(List<long> ids)
+        {
+            var respuesta = new RespuestaVMR<bool>();
+
+            try
+            {
+                MedicoBLL.Eliminar(ids);
+                respuesta.datos = true;
+            }
+            catch (Exception e)
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = false;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo, respuesta);
+        }
+
+
+
+    }
+}
+
+
+namespace WebAPI.Controllers
+{
+    public class PacienteController : ApiController
+    {
+        [HttpGet]
+        public IHttpActionResult LeerTodo(int cantidad = 10, int pagina=0, string textoBusqueda=null)
+        {
+            var respuesta = new RespuestaVMR<ListadoPaginadoVMR<PacienteVMR>>();
+
+            try
+            {
+                respuesta.datos = PacienteBLL.LeerTodo(cantidad, pagina, textoBusqueda);
+            }
+            catch(Exception e) 
+            {
+                respuesta.codigo = HttpStatusCode.InternalServerError;
+                respuesta.datos = null;
+                respuesta.mensajes.Add(e.Message);
+                respuesta.mensajes.Add(e.ToString());
+            }
+            return Content(respuesta.codigo,respuesta);
+        }
+       
+    }
+}
+
+
+
+
+
+
+
+
+====================================================================================================================================================================
+
+
+EXPORTAR SQL		https://www.youtube.com/watch?v=tiCoATXbmeM
+
+EXPORTAR CHARP		
+
+
+
+
+
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+====================================================================================================================================================================
+public static string GetDetailsPaciente(List<long> ids)
+{
+    string details = "";
+
+    using (var db = DbConexion.Create())
+    {
+        var items = db.Paciente.Where(x => ids.Contains(x.id));
+
+        foreach (var item in items)
+        {
+            details += "[" + item.id + "] ";
+            details += item.nombre + " ";
+            details += item.apellidoPaterno + " ";
+            details += item.apellidoMaterno != null ? (" " + item.apellidoMaterno) : " ";
+        }
+    }
+    return "No se encontró datos";
+}
+
+public string GetDetailsMedico(long id)
+{
+    using (var db = DbConexion.Create())
+    {
+        var x = db.Medico.Find(id);
+        if (x != null)
+        {
+            return "[" 
+		+ x.id + "] " 
+		+ x.nombre + " " 
+		+ x.apellidoPaterno + " "
+            	+ (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False ");
+        }
+    }
+    return "Medico no encontrado";
+}
+
+public static string DetailsPaciente(long id)
+{
+    PacienteVMR x = PacienteDAL.LeerUno(id);
+
+    if (x != null)
+    {
+        string detalles = "[" + x.cedula + "] " + x.nombre + " " + x.apellidoPaterno + " " +
+            (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False ");
+
+        return detalles;
+    }
+    return "Paciente no encontrado";
+}
+public static string DetailsMedico(long id)
+{
+    MedicoVMR x = MedicoDAL.LeerUno(id);
+
+    if (x != null)
+    {
+        string detalles = "[" + x.cedula + "] " + x.nombre + " " + x.apellidoPaterno + " " +
+            (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False ");
+
+        return detalles;
+    }
+    return "Paciente no encontrado";
+}
+
+
+public static string[] DetailsPaciente(long id)
+{
+    PacienteVMR x = PacienteDAL.LeerUno(id);
+
+    if (x != null)
+    {
+        string[] detalles = new string[]
+        {
+            $"[{x.id}]",
+            $"[{x.cedula}]",
+            x.nombre,
+            x.apellidoPaterno,
+            x.apellidoMaterno != null ? (" " + x.apellidoMaterno) : " ",
+        };
+
+        return detalles;
+    }
+    return new string[] { "Paciente no encontrado" };
+}
+public static string[] DetailsMedico(long id)
+{
+    MedicoVMR x = MedicoDAL.LeerUno(id);
+
+    if (x != null)
+    {
+        string[] detalles = new string[]
+        {
+            $"[{x.id}]",
+            $"[{x.cedula}]",
+            x.nombre,
+            x.apellidoPaterno,
+            x.apellidoMaterno != null ? (" " + x.apellidoMaterno) : " ",
+        };
+
+        return detalles;
+    }
+    return new string[] { "Medico no encontrado" };
+}
+
+public static string[] DetailsIngreso(long id)
+{
+    IngresoVMR x = IngresoDAL.LeerUno(id);
+
+    if (x != null)
+    {
+        string[] detalles = new string[]
+        {
+            $"[{x.id}]",
+            $"{x.fecha}",
+            $"{x.numeroSala}",
+            $"{x.numeroCama}",
+            $"{x.diagnostico}",
+            $"{x.observacion}",
+        };
+    }
+
+
+    return new string[] { "Ingreso no encontrago" };
+}
+
+
+
+
+
+
+public string GetDetailsUser<T>(long id) where T : class,IUserVMR
+        {
+            using(var db =  DbConexion.Create())
+            {
+                var x = db.Set<T>().Find(id);
+
+                if(x != null)
+                {
+                    string details = "[" + x.cedula + "] "
+                    + x.nombre + " "
+                    + x.apellidoPaterno
+                    + (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False ");
+
+                    return details;
+                }
+            }
+            return "Usuerio no encontrada";
+        }
+
+
+public static IUserVMR<IngresoVMR> DetailUser(long id)
+{
+    IUserVMR<IngresoVMR> resultado = new IUserVMR<IngresoVMR>();
+
+    using (var db = DbConexion.Create())
+    {
+        var query = db.Paciente.Where(x => !x.borrado).Select(x => new PacienteVMR
+        {
+            id = x.id,
+            cedula = x.cedula,
+            nombre = x.nombre + " " + x.apellidoPaterno + 
+                (x.apellidoMaterno != null ? (" True " + x.apellidoMaterno) : " False "),
+            direccion = x.direccion,
+            celular = x.celular,
+            correoElectronico = x.correoElectronico
+        });
+    }
+    return resultado;
+}
+
+
+
+COMER 15:50
+

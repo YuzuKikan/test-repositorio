@@ -1,0 +1,635 @@
+IDEAS CLARAS DEL PROYECTO
+
+BACKEND:
+	generacion de modelos
+	acceso a datos Exp. Lambda y Linq
+	Contexto de BD
+	validación con anotaciones y medatados
+	Consumo de servicion web
+	Implementación de servicios
+FRONTEND
+	creacion de modulos con carga perezosa
+	creacion de componentes
+	servicios
+	pipes
+	directivas
+	validadores
+	material 
+	bootstrap
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+01-COMUN			almacena un proyecto para guardar los recursos que son comunes y que serán utilizados desde todas las capas. Ej: Models, utilitarios, funciones para encriptar, funciones para resolver problemas puntuales que no están atadas especifícamente en alguna capa
+02-MODELO			el proyecto del modelo, generamos el modelo desde la base de datos y contendrá entre otros las entidades del modelo, el contexto, metadatos y las validaciones que aplicaremos con anotaciones, así como validadores personalizados que podemos tener en el modelo
+03-ACCEDO A DATOS		será donde tendremos los repositorios para hacer consultas a la BD, insert/update/delete a cada una de las tablas
+04-CLIENTE REST			 lo usaremos para implementar el consumo de servicios rest. Ej: obtencion de nr de camas y nr de salas de los ingresos
+05-LOGICA DE NEGOCIO		sirve para implementar la lógica de validacion, accesos y para abstraer de alguna manera la comunicacion entre la capa de presentación (proyecto web api) y el resto de los proyectos que son acceso a datos o consumo de servicio rest, ya que desde la capa de Presentación no deberíamos acceder a estos proyectos
+06-WEB API			 
+
+6 carpetas para almacenar 6 proyectos que serán la capa que contendrá nuestra solución
+
+A continuacion creamos un proyecto para cada carpeta una "Biblioteca de clases(.Net Framework)"
+Tras tener los proyectos, vamos a las "Referencias" de cada una agregamos una referencia a los proyectos correspondientes en cada una según el caso.
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+MANAGER DE SQL SERVER 
+
+1. En 'Base de Datos' creamos una nueva BD con nombre.
+2. Crear las tablas correspondientes
+3. Nos facilitamos con la forma de crear tablas en "manager sql server"
+
+3-1 	habrá casos donde la columna de la tabla podemos poner un valor por defecto asumiendo que eventualmente los médicos no serán especialistas y solo en algunos casos lo serán
+	podemos poner un valor por defecto o dejarlo así y manejarlo a nivel de interfaz, que siempre se coloca si va a ser o no específico.
+
+3.2	las Foreign Key: vamos a la columna, elegimos la opcion "Relashionship", "Add", en el apartado "General" pinchamos en "Tables And Columns" donde se despliega una página. Elegimos la tabla de Primary Key y la asociamos al Foreign key de la tabla. 
+
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+
+Ahora toca generar el modelo a partir de BD para poder continuar implementando la solucion utilizando el .net
+
+HAY DOS MÉTODOS
+	dbFirst : crear la BD y luego importar o generar el modelo con el cual trabajar (1. generar BD 2. generar modelo)
+	codeFirst: se codifica el modelo y se genera la BD (1. generar modelo 2. generar migraciones(a través de comandos ejecutar estar migraciones para generar la BD) 3. generar la BD)
+
+1. Creamos una carpeta en "02-Modelo" donde irán los modelos "Modelos"
+2. Instalar el "entity framework" o orm para comunicarnos desde el lenguaje orientado a objeto hacia una BD con expresiones simples Lambda o lenguaje LINQ para realizar consultas que el mismo entity traducirá en sql server
+===============
+En la carpeta "02- Modelo" creamos en "preferencias" una carpeta llamado "Modelos" y "administrar paquetes NuGet" para instalar "entityFramework"
+===================
+
+2.1 carpeta "Referencias" ==> "Administrar paquetes NuGet..." ==> "EntityFramework" ==> instalar
+
+3. En proyecto "Modelo" agregar nuevo elemento de "Datos" el "ADO.NET Entity Data Model", opcion "EF Designer desde BD"
+
+3.1.1 establecemos una nueva conexion ==> [servidor = (está al inicio del SqlServer) o nombre estacion/IP del servicio de la empresa]
+
+3.1.2 nombre de usuario [sa] contraseña [gato/u otra]
+3.1.3 seleccionamos la BD
+3.1.4 "Si, incluir datos de confidencialidad en la cadena de conexión."
+3.1.5 poner nombre a la cadena de conexion como "DbConexion"
+ 
+3.2 seleccionamos todas las tablas a trabajar, y poner nombre al espacio de modelo
+
+El modelo se ha generado pudienso ver una visualización de las tablas con sus relaciones y campos. Podemos también ver como se han generado cada uno de los elementos del modelo que es un código completamente generado. Cada una de las entidades tienen sus clases que modela cada uno de los campos de las tablas. 
+
+
+DEFINICION DEL CONTEXTO
+
+crear carpeta para almacenar el contexto dentro del proyecto
+[es opcional ya que entity framework crea automáticamente una clase contexto funcional][se puede redefinir o extender la clase para personalizar ciertas propiedades que son importantes al proyecto de cara a un ambiente de produccion donde ciertos parámetros deben ser personalizador]
+
+crear la clase "Conexion"
+	 [importante realizar modificaciones para que el EntityFramework lo entienda como una extensión a la clase original del contexto]
+
+1. mismo "namespace" que el modelo
+2. clase tipo public parcial y de extiende de DbContext
+	[así extenderá algunas características de la clase original de Context]
+
+3. crear constructor para establecer la comunicacion con la BD, traemos el constructor BASE y a redefinir algunos de los métodos para trabajar en esta clase
+	[vamos a heredar métodos/funciones de Context]
+4. "this.Configuration.LazyLoadingEnable=false" [para evitar que los objetos anidados dentro de objetos automáticamente se carguen haciendo uso de las propiedades de acceso get y set. ERROR DE REFERENCIA CICLICA ---  en la ejecución de crean los objetos json y al tener cierta duplicidad puede inducir a errores]
+5. "this.Configuration.ProxyCreationEnable" [impedimos que se genere o se caegue de manera automática los objetos relacionados con un objeto que de repente estamos consultando ]
+6. "this.Database.CommandoTimeout=900" [podemos definir en la propiedad de BD el tiempo de espera  de respuesta de BD,]
+
+
+Creación de METADATOS
+
+Creamos una extensión para cada una de los modelos creados donde definiremos como queremos que se realicen las variaciones en cada uno de los datos.
+
+1. Creamos las CLASS de cada modelo que importamos de BD. [si nos fijamos en el Modelo vemos las clases del modelo que importamos de la BD]
+
+2. Vamos a la clase creada para indicar a EntytiFramework que se realicen validaciones sobre los campos de esta entidad.
+
+2.1 la extensión del modelo debe tener el mismo spacename donde están la clase modelo
+2.2 modificamos la definicion de la clase, clase pública similiar al contexto y parcial 
+	[indicamos al EntityFramework que es una extensión de la clase con mismo nombre]
+2.3 definimos una clase XXXMetadatos 
+2.4 indicamos que la clase XXXMetadatos se va a aplicar sobre la clase de extensión del modelo 
+	añadimos encima de la clase extensión ==> [MetadataType(typeof(XXXMetadatos))]
+2.5 integramos las reglas de la validación
+
+2.5.1 buscamos los campos susceptibles a la validación
+2.5.2 copiamos los campos
+2.5.3 usando anotaciones para definir las validaciones. EJ [Required] [StringLength(10)] [Range(0, 999999.99)] garantizar que sea positiva [EmailAddress]
+	de esta manera EntityFramework los objetos creados sigan esa validación
+	[de esta manera definimos una serie de validaciones a realizar sobre cada uno de los campos como metadato a la clase de extensión del modelo]
+
+2.6 Creamos una carpeta "Validadores" para implementar validadores personalizados ya sea ahora o a posteriori. Se incorporarán los validadores dentro de las validaciones de los metadatos correspondientes a la entidad correspondiente.
+
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+CAPA DE ACCESO A DATOS
+
+[[	Se debe implementar un módulo para cada entidad donde se incorporen funcionalidades para Crear, Leer, Actualizar y Eliminar 	]]
+
+1. Ubicamos carpeta "03-Acceso a Datos"
+2. Crear carpeta "DAL" y crear clases "XXXDAL" correspondientes
+3. Definimos que es una clase publica, accesible desde el resto de proyectos que tengan incluido el acceso a Datos
+4. 
+4.1 metodos a implementar en cada uno de los repositorios a la especificación
+4.2 definimos una funcionalidad pública
+4.3 estática [para permitir acceder a ellas con el nombre de la clase sin necesidad de crear objetos]
+4.4 definir tipo de dato que devuelve
+4.5 definir la visibilidad del método
+4.6 definir los parámetros segun la funcionalidad del método
+
+
+
+
+
+CREAR UNA CLASE ViewModel
+
+Ubicamos en "01-Comun"
+1. Creamos carpeta "ViewModels"
+2. Definimos los campos que se devolverá al Front [nos podemos ayudar del modelo Medico]
+	[es buena práctica llamar igual los campos a la de entidad para fácil comprensión]
+10:10
+===== Para mirar [si devuelve 10 resultados por página, a parte se ve una visualización de 1-10 de un 24 total. El paginado es capaz de visualizar la cantidad total de elementos]
+===== Si queremos que nos DEVUELVA más valores, debe ser ALGO que los contenga (como lista de médicos + cantidad de elementos) SOLUCION [crear una clase que contenga estos dos, el cual se creará en ViewModels]
+
+15:00
+===== Generalizamos el método para que pueda ser usado por cada clase 
+
+
+			UN VIDEO DE MEDIO
+
+crear una estructura de que replicaremos al resto de métodos a acceso a datos y que siempre va a ser un estándar que usaremos.
+usamos "using" para declarar la conexion a la base de datos
+debemos agregar en el proyecto Accedo a Datos el EntityFramework ya que haremos consultas.
+
+using(var db = DbConexion.Create()){} [es la plantilla para añadirla en cada método]
+	[A continuación usaremos varias expresiones Lambda para construir la consulta a BD. Estas permiten declarar OBJETOS del tipo de una tabla de BD en tiempo de escritura de código]
+
+::: Consulta base/parcial [irá avanzando en la implementación]
+	creamos la variable donde se guardará la sentencia de la consulta a la BD
+con la variable que es la conexion a BD llamamos a la tabla con cual trabajaremos y definir la cláusula/condicion que se transcribirá a SQL
+
+::: Aplicar el Criterio de Búsqueda
+	primero miramos si el texto de búsqueda no es null (filtro por texto, si no hay texto no entra en el if)
+
+::: Devolver
+	en nuestra variable respuesta se guardará el resultado de la busqueda en la consulta convertido en una lista gracias a .ToList()
+
+
+CONTINUAR LOS APUNTES DESDE ESTE VIDEO	 =================== REVISAR LOS ANTERIORES Y VER SI SE PUEDEN ARREGLAR ALGUNAS COSAS
+https://www.youtube.com/watch?v=tXQ94FZAgK8&list=PLCIZXv6JLFyUOfZAlWqtB043rKcmr75nT&index=10
+
+
+METODO LEER UNO
+
+Dentro de la plantilla vamos a introducir el parámetro (si es el caso) para trabajar con ella.
+
+
+Para formular la consulta empezamos con el objeto "db", indicamos la tabla "Medico" y aplicamos la condición donde el objeto "x" (representa un médico) exista aún y coincida en el PK (primary key)
+
+METODO CREAR 
+
+Dentro de la plantilla vamos a introducir el parámetro para crear el nuevo objeto.
+Simplemente se añaden dos códigos donde se añade el parámetro y salvaguardar los cambios.
+	db.Medico.Add(item); db.SaveChanges(); 
+
+METODO ACTUALIZAR
+
+Dentro de la plantilla vamos a introducir el parámetro para actualizar el objeto.
+Como debemos buscar una coincidencia entre toda la bd de la tabla usaremos una función ya creada ".Find(parameter)". De esta forma ya tenemos la Entidad guardada en la variable.
+A continuación definimos los campos que deben actualizarse.
+
+DATO: habrá otro métodos donde se usa el mismo método "Crear" y se sobrepone el objeto a la anterior, en ocasiones esta sobreposición puede actualizar algunos campos poniéndolos a NULL, cosa que no es algo deseado.
+
+Finalmente diremos al Entity que el estado del objeto ha sido modificado y salvaguardamos los cambios con:
+	db.Entry(itemUpdate).State = System.Data.Entity.EntityState.Modified;
+	db.SaveChanges();
+
+METODO ELIMINAR
+
+Dentro de la plantilla vamos a introducir el parámetro que debemos buscar en la BD para eliminarla.
+Como vamos a borrar entre 1 a más objetos tendremos de parámetro un listado de identificadores, entonces en la condición pondremos que cada identificador que recibimos contengan el identificador del elemento en específico.
+[Todos los elementos que tengan id que están dentro del listado]
+
+DATO: segun como quieres el método de borrar puedes o cambiar una propiedad del objeto para que no se vuelva a leer en el listado de objetos manteníendolo en una esquina o eliminarla completamente.
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+
+Business-Logic Layer [BLL] Capas de Lógicas de Negocios
+
+Básicamente la entidad no contiene ninguna BLL, por lo tanto la clase solo funcionará solo como conexion entre la capa de presentación y la capa de acceso a dato.
+
+En el archivo introducimos todos los métodos estando vacíos.
+Desde aqui estaremos invocando a los métodos correspondiente en la etapa de acceso a datos
+
+en los métodos llamamos a la clase y pegamos el nombre del método junto a los parámetros sin sus tipos de datos.
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+
+Controlador Web API
+
+Creamos un controlador en la "Web API" para exponer los 5 servicios que van a permitir leer elemento/leer todos los elementos/crear elemento/eliminar elemento 
+
+En la carpeta "Controllers" agregamos "Controlador...", en la interfaz vamos a "Controlador Web API 2 - en blanco"
+[ya que codificaremos cada uno de los servicios desde cero y así vamos a personalizarlo como queremos.]
+Tras crear el controlador codificaremos cada uno de los servicios. EJ.
+	public IHttpActionResult LeerTodo(int cantidad = 10, int pagina = 0, string textoBusqueda = null){}
+
+==Comenzamos la implementación.
+
+DATO: todos los servicios van a devolver una respuesta que será consumida desde el FrontEnd y por tanto es recomendable estandarizar la forma/estructura de la respuesta ya que cada uno devolverá un tipo distinto seguramente. 
+En sentido generañ en todos los APIREST de servicios red estandarizar o crear un objeto que sea el que se devuelva y siempre deje las respuestas estandarizadas para una mejor manipulación de la información
+
+Creamos otra clase VM para modelar las respuestas que vamos a devolver, 
+
+Definir un código de respuesta que nos pueda permita saber si la transacción fue exitosa o no, para ello creamos la siguiente propiedad:
+	public HttpStatusCode codigo {get;set;}
+Creamos una propiedad que sea la información que nos devolverá [será genérico]
+	public T datos {get;set;}
+Creamos una propiedad con Listas de mensajes con los errores que aparezcan e indiquen de alguna manera cual fue el error para visualizar en Front y el usuario sepa que pasó o que error se produjo.
+	public List<string> mensajes {get;set;}
+Creamos el constructor de esta clase
+	public RespuestaVMR()
+	{
+	codigo = HttpStatusCode.OK;
+[definir de forma predeterminada]
+	datos = default(T); 
+[asigne la info inicial de acuerdo al tipo de dato que en tiempo de ejecución se defina en la respuesta]
+	mensajes = new List<string>();
+[finalmente iniciar el listado de los mensajes de respuesta una vez tengamos la información]
+	}
+	
+Tras esto podemos indicar en la clase Controller los métodos 
+https://www.youtube.com/watch?v=cHI3d-qqxtY&list=PLCIZXv6JLFyUOfZAlWqtB043rKcmr75nT&index=12
+MINUTO 5-6
+
+==> No carga página, todo en negro y sin datos
+
+=> Para ejecutar bien un proyecto hay que seleccionar como "proyecto de inicio" la clase "Web API" para evitar un error
+Al no tener ningún HTML se nos abrirá una página por defecto al cargar la ruta, al ser un proyecto de servicio copiamos la ruta y la pegamos en postman donde haremos una consulta [al pegar la URL hay que añadir además "api/nameControlador" siendo así "https://localhost:52844/api/medico"]
+
+DATO: hay un plugin "RESTED" para el navegador que nos permite mandar peticiones al cliente Rest
+
+=> pones que el body es de tipo json y ponemos en nombre de los parámetros + valores para ver si la imprime
+
+==> al ver el error "no admite el metodo get" iremos a corregir en VisualStudio
+
+=> vamos a indicar al Controller que el servicio[método que hará el CRUD] va a ser consumido utilizando "[HttpGet]" para que sepa como utilizar o por que vía debe utilizar.
+
+==> tiene problemas con la dbConexion
+
+=> En el proyecto principal "Web API" hay que incorporar la configuración necesaria de EntityFramework (la cadena de conexion) que estará configurada en el proyecto Modelo y la copiamos en el proyecto principal ya que será la configuracion que se ejecuta tras la compilación. Copiamos la etiqueta <connectionString>, la que define las credenciales para conectarse a la BD
+
+==> salen errores asociados al EntityFramework
+
+=> toca instalar el EntityFramework en el proyecto principal 
+
+==> Finalmente vemos corriendo la app y devuelve una respuesta segun el estructura que hemos definido y los datos que hayan en las tablas correspondientes 
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+
+A veces pueden suceder problemas que sean ocasionados por CORS
+[mecanismo de seguridad que implementan las capas de servicios web para no permitir el consumo de los servicios desde estaciones de trabajo distintas a donde está hospedado el servidor]
+ 
+Para evitarlo[en "Web API"] vamos a instalar y configurar el CORS 
+
+=> administrar paquete NutGet y buscamos "Mocrosoft.AspNet.WebApi.Cors" para instalar
+=> tras la instalación vamos al "App Start" y añadimos a la clase que hay el "config.EnableCors();"
+=> en la cabecera del Controller pondremos la información que indica origen/cabecera/metodo. Ayudará en evitar un error cuando vaya a consumir el servicio desde la aplicación de angular[fronted]. Se puede modificar posteriormente para una mejor seguridad.
+	[EnableCors(origins: "*", headers: "*", methods: "*")]
+
+
+Continuando con el siguiente servicio[Update], copiamos la estructura try.catch y la adaptamos a su función. 
+=> si no muestra el id vamos viajando usando el Ctrl+Click en el método crear y ajustamos para que esta nos devuelva el id del item.
+
+https://www.youtube.com/watch?v=3a6vFDR25Gs&list=PLCIZXv6JLFyUOfZAlWqtB043rKcmr75nT&index=13
+{HAY UN PROBLEMA DONDE EL ID DEL ELEMENTO SIEMPRE SE DUPLICA EN 0 Y NO AUMENTA, MIRAR IMPORTANTE}
+
+Comprobamos también los demás servicios junto a la base de datos y vemos que se efectúan los cambios.
+
+
+
+{Las entidades Paciente/Ingreso/Egreso lo haremos proximamente, ahora haremos la parte Frontend}
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+
+CREAR PROYECTO ANGULAR, estructura/modulo/componentes
+
+en la carpeta donde está la parte de backend creamos un repositorio con el CMD para trabajar con Angular.
+
+ng new Hospital
+¿routing? Yes
+escogemos un preprocesador de css == ya que eventualmente nos puede ayudar/facilitar la parte de los estilos
+
+Tras la creación del repositorio "Hospital-fronted" abrimos con VisualStudioCode y trabajaremos.
+En la carpeta "app" crearemos varias carpetas.
+
+=> config = 		archivo de configuración general del proyecto
+=> directives = 	directivas que vamos a crear 
+=> guards = 		[más adelante] manejar la seguridad de acceso a cada uno de los módulos
+=> interceptors = 	nos permite interceptar las peticiones al servidor poder agregar cierta lógica de manera automática en las peticiones 
+=> modules = 		todos los módulos se van a crear dentro de esta carpeta
+=> pipes = 		para implementar algunos pipes personalizados para permitir formatear la información que se visualizará en pantalla
+=> services = 		implementamos la manera en que se consumen los servicios que tenemos implementados en el backend
+=> validators = 	donde vamos a poner los validadores personalizados para usar en cada uno de los campos o información que vamos a registrar en cada uno de las entidades
+
+
+Crearemos los módulos para las tablas de BD
+	ng g m module/xxxxxnameModule
+
+para implementar el módulo médico creamos dos componentes ya que podemos ver en cada módulo un listado general de elementos donde vamos a tener funcionalidades(botones, busquedaTexto, pulsar un elemento, borrar, siguiente pagina) y en otro, la ventana modal, se visualiza los datos de un elemento específico.
+	ng g c /modules
+
+El segundo componente es el MODAL que contiene al formulario que sirve para visualizar los datos, editar elementos y crearlos. 
+=> Lo llamamos componente FORM ya que es un componente de formulario
+
+Tras tener los dos componentes [el de listado y del formulario] vamos a trabajar con los archivos .ts donde implementaremos como tal toda la lógica del componente utilizando como lenguaje de programación typeScript
+
+Ahora tenemos una estructura de carpetas, los modulos, los componentes necesarios para trabajar en la parte FrontEnd.
+
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+
+IMPLEMENTACIONES GLOBALES 
+
+Se pondrán varios turulu rulurulu
+
+
+==> Primero vamos al "package.json", encargado de vializar todas las librerías y dependencias intaladas, instalamos algunas dependencias adicionales para nuestro proyecto.
+
+1. Material; biblioteca de componentes para implementación visual de la aplicacion
+	material.angular.io ==> Biblioteca oficial de Material para Angular
+	ng add @angular/material  ==> pegarlo el comando, indicamos que se adicione a Angular la biblioteca de Material
+1.1 Aceptamos el procedimiento
+1.2 Elegimos el Custom Theme (podemos visualizarlo en el navegador de la página anterior)
+1.3 Material Tipography (a tu eleccion) 
+1.3.1 Activar Animaciones (a eleccion)
+
+2. Añadir Boostrap, se usará más para el sistema de filas y columnas 
+	npm i bootstrap
+
+3. Mensajes flotantes de error o informativo
+	npm i ngx-toastr
+
+==> Segundo, vamos al "angular.json" ya que es necesario configurar el style y script de los componentes instalados. 
+Añadimos en el style 
+	"node_modules/ngx-toastr/toastr.css",
+	"node_modules/bootstrap/dist/css/bootstrap.css"
+Añadimos en scripts
+	"node_modules/bootstrap/dist/js/bootstrap.js"
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+
+Vamos a crear un módulo Global para manejar algunos elementos generales en la aplicación. Estos elementos son parte de la página que visualizamos al inicio del proyecto en el navegador. 
+	ng g m modules/global
+
+Dentro de este directorio creamos unos componentes globales para la app
+	ng g c modules/global/components/index
+	ng g c modules/global/components/menu-global
+
+Antes de trabajar con las rutas de nuestra aplicacion, ejecutamos por defecto para ver que nos muestra en el navegador nuestra aplicacion de Angular.
+	ng s --o
+
+Creamos otro archivo "global.routing.ts", se configura las rutas de este componente	Con el siguiente código a implementar definimos la el array de rutas con su ruta, componente que se muestra por defecto y la carga lenta de los componentes por partes(carga de rutas hijas)
+	============================
+import { Routes } from "@angular/router";
+import { IndexComponent } from "./components/index/index.component";
+
+export const globalRoutes: Routes = [
+    {
+        path: '',
+        component: IndexComponent,
+        loadChildren: () => import('./global.module').then(m => m.GlobalModule)
+    }
+];
+	============================
+
+En "app.component.html", donde se cargará la ruta que se esté ejecutando en el momento, añadimos las etiquetas/componente que responda a esa ruta.
+	<router-outlet><-7router-outlet>
+En "app.component.ts", definimos las rutas que debemos conectar. Añadimor una ruta que sea string, el componente de carga por defecto y las rutas hijas(como queremos abarcar todas las rutas hijas creamos un archivo global de rutas)
+	============================
+const routes: Routes = [
+    {
+        path: '',
+        component: MenuGlobalConponent,
+        loadChildren: () => import('./rutas.module').then(m => m.RutasModule)
+    }
+];
+	============================
+Creamos el archivo "rutas.module.ts" en "app" donde abarcará todas las rutas hijas.
+[las rutas del módulo global creada la invocamos acá con todas las rutas del módulo] 
+	============================
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
+import {globalRoutes} from './modules/global/global.routing';
+
+@NgModule({
+    imports:[RouterModule.forChild([
+        ...globalRoutes,
+    ])],
+    exports:[RouterModule]
+})
+export class RutasModule { }
+	============================
+Así tenemos la posibilidad de cargar rutas hijas de cada uno de los modulos que vayan creando, obviamente se deben agregar en "rutas.module.ts"
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+Modificamos el archivo "menu-global" pudiendo añadir elementos de la "https://material.angular.io/" e implementarla
+
+DATO A TENER EN CUENTA ==> todos los componentes de Material se deben cargar independientemente de que ya esté instalada en la librería
+Material te ofrece para poder instalar o activar tu aplicacion los componentes específicos [es un error recurrente si el componente nuevo que utilicemos no hayamos cargado previamente en nuestra aplicacion]
+
+Copiamos las APIS correspondientes y la agregamos a "global.module.ts" del archivo "components", además debemos importarla y exportarla.
+[OBJETIVO: usar la clase misma como un repositorio de módulos para integrar/agregar al resto de modulos sin necesidad de importarlas en cada una]
+
+A continuación importamos la clase en cada uno de los módulos.
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+
+COMO TRABAJAMOS CON RUTAS HIJAS EL "MenuGlobalConponent" dentro de este se cargan las rutas hijas, a su vez las rutas hijas pueden ser las rutas del modulo global "global.routing.ts" que apunta precisamente al componente index "IndexComponent", pues necesitamos agregar en "menu-global.component.html" la router-outlet
+[va a visualizar el componente y luego debe cargar según las rutas en la que estamos el componente correspondiente que responda]
+
+Si sale un error es porque falta agregar el modulo de las rutas a "global.module.ts", vamos a importar el "RouterModule"
+
+Continuamos con el index.html añadiendo las etiquetas y el css para que en el navegador empiece a verse con una estructura clara y definida.
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+CONECTANDO ANGULAR CON BACKEND === IMPLEMENTAMOS EL ACCESO AL MODULO MEDICO
+
+Al pasar por el boton de médico nos muestre el listado de esta.
+En el módulo médico creamos las rutas y nos ayudamos de las rutas globales
+
+
+
+
+
+
+
+
+
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+IMPLEMENTACION DE LA PAGINA PRINCIPAL DEL MODULO DE MEDICOS [video20]
+
+
+Ejecutamos los dos entornos, el proyecto frontend de Angular y la parte backend de CSHARP
+[para la implementación necesitamos el componente de Material de tablas y de paginado para  visualizar el listado de medicos paginados desde el Backend. Para esto ya tenemos preparado los servicios desde el backend, tenemos implementado el servicio para leer todos los servicios desde el frontend]
+
+En Modulo Medico/components/index/index.ts tenemos implementado el método "LeerTodo()"
+[en el index.html del modulo medico debe haber, botonCrear, busquedaTextual, tabla/datos, botonBorrar, paginadoMedico]
+
+Añadimos las etiquetas correspondientes y un estilo que se adecue a la página. 
+Como vemos en la etiqueta tabla, el "dataSource " es un objeto que viene de la implementación del componente que contendrá el listado de medicos/elementos que se irá visualizando en la tabla(información de los médicos)
+	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+El objeto "displayedColumns" es el que indica a Material cuales son las columnas que se van a visualizar(columnas a visualizar)
+	<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+Se añade el index.ts en la clase "IndexComponents"
+	displayedColumns: string[] = ['nameColum1', 'nameColum2', 'nameColum3', 'nameColum4'];
+	dataSource = ELEMENT_DATA;
+[dataSource = ELEMENT_DATA; ====> dataSource=[{p:1,n:2,w:3,s:4},{p:1,n:2,w:3,s:4}];   ]
+
+En dataSource creamos un objeto "MatTableDataSource" que maneja cualquier tipo de objeto que va a visualizar en la tabla. En un objeto GENERICO debemos definir el tipo de dato usaremos. 
+[podemos crear modelos en el frontend para mo delar cada uno de los objetos que vamos a manejar]
+	dataSource = new MatTableDataSources<any>([]);
+	[any = cualquierType // () = inicializamos // [] = una lista vacia de elementos]
+
+DATO: los nombres de variables de displayColumns hay que añadirlo en la definicion de cada columna del html para que tengan una direccion donde llegar los datos del elemento.
+	modificar la información que se visualiza en cada una de las columnas; [elemento.xxxxx ===> xxxxx es el nombre de cada uno de los componentes que obtenemos en el servicio de backend]
+
+Ahora asociamos al DataSource el listado de elementos, vamos al método "LeerTodo()" y añadimos
+	this.dataSource.data = respuesta.datos.elemento;
+
+
+{ ==================decir como hice la parte de busqueda texto================ }
+NOTA: MIRAR EN LA BD SQL PARA VER SU NULL LO RECOGE COMO UN VALOR VACÍO O UN STRING 'NULL'
+
+En caso de que no haya resultados por la búsqueda añadimos un mensaje de vacio para ese caso.
+	<tr class="mat-row" *matNoDataRow=""></tr>
+	[que aparezca cuando no exista info en la tabla]
+	<td class="mat-cell" [attr.colspan]="displayedColumns.length"><td/>
+	[indicamos la cantidad de columnas que definimos, tendrá toda la anchura de la tabla]
+	<div class="mensaje-no-existen-datos"> No existen datos para mostrar</div>
+
+Ahora añadimos la funcion de Borrar Elemento.
+	 matTooltip="Eliminar elemento", se mostrará el mensaje del boton al pasar por encima
+	
+DATO: no olvidar importar y exportal la etiqueta
+
+	
+En "medico/components/index/index.ts"
+	eliminar(medicoId: number){
+	    let confirmacion = confirm('¿Estás seguro/a que desea eliminar el elemento?')
+	    if(confirmacion){
+		let ids=[];
+		
+	    }
+	}
+[Toca llamar al servicio de backend para implementar el método de eliminar elemento]
+
+En "medico/components/index/index.html"
+	(click)="eliminar(element.id)"
+
+En "services/http.service.ts"
+	Eliminar(ids: number[]){
+	    const option = {
+		headers: new HttpHeaders({
+		    'Content-Type': 'application/json'}),
+		body: ids
+	    };
+	    return this.httpCliente.delete('http://localhost:=========')
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DATO
+	en una List<Medico> podemos poner de tipo la entidad, pero no es lo recomendable
+		en proyectos grandes donde hay gran cantidad de entidades no se recomienda usar las para que sean devueltas en los listados que se muestran a los clientes. Lo recomendable sería crear clases ViewModel que contengan campos específicos que queremos visualizar.
+
+Clase Comun [repositorio de funcionalidades y clases utilitarias. Servirá para el proyecto comun crea las clases ViweModel a utilizar posteriormente para trabajar en el acceso a datos y el resto de proyectos donde se utilicen estas clases]
+
+No confundirse la Entidad y una clase que representa a la Entidad
+
+x ==> gracias a las expresiones Lambda es declarar objetos del tipo de una tabla de BD en tiempo de escritura de código.
+	Si la consulta es sobre la Tabla Medico, la x hace referencia a los distintos objetos que están presentes en esa tabla.
+	Se hace una unión entre la tecnología orientada a Objetos y la tecnología relacionas que es la BD
+	x es igual a los objetos de la tabla médico, puede denominarse de cualquier forma nomás ser consecuente con el nombre que se coloque debe ser el mismo que luego se utilice en las distintas clausulas
+
+
+
+
+
+TENGO UN PROBLEMA CON LA CONEXION A LA BASE DE DATOS (EN ACTIVIDAD DE SOLUCION)
+	LA MEJOR SOLUCION SERÍA VOLVER A HACER LA BD EN UN USUARIO 
+
+DAL => Data Access Layer
+
+VMR => View Model Resource
+
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+
+https://www.youtube.com/watch?v=tX8NybMnUvg&list=PLCIZXv6JLFyUOfZAlWqtB043rKcmr75nT&index=4
+https://www.youtube.com/watch?v=CmWleAx4CFw
+
+JSONPLACEHOLDER
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________ 
+
+
+
+RESTABLECER CONTRASEÑA SQL SERVER
+	https://www.youtube.com/watch?v=b15XYi868k8
+	https://www.youtube.com/watch?v=fMugjb0-glA&t=18s
+EXPORTAR BD
+	https://www.youtube.com/watch?v=SW42zxfyKAY
+CONECTAR VISUALSTUDIO CON SQL SERVER
+	https://www.youtube.com/watch?v=CmWleAx4CFw
+
+https://www.youtube.com/results?search_query=como+puedo+crear+un+proyecto+con+angular+y+csharp
+
+
+https://www.youtube.com/watch?v=fjmaXtgJpUg&list=PLWYKfSbdsjJgCXQ_Y_d76x-v9hR8Tr_1v&index=16
+
+https://www.youtube.com/watch?v=FNYHeemZHxg&list=PLx2nia7-PgoA1-y-qrxCQii0-EmC4JZ5e
+
+https://www.campusmvp.es/recursos/post/como-crear-aplicaciones-asp-net-web-forms-con-visual-studio-2022.aspx
+https://social.msdn.microsoft.com/Forums/es-ES/6a33dfa7-d8aa-4807-847c-2e88ec2d737d/aplicacin-web-aspnet-no-aparece
+
+
+
+VIERNES		[[[CONTINUAR CON EL DESARROLLO DEL MODULO MEDICO AGREGANDO FUNCIONALIDADES]]]
+
+
+primera app .net core 		https://www.youtube.com/watch?v=LJQZZ55ZArU
+curso .net core 		https://www.youtube.com/watch?v=qVietAcR_ag&list=PLLJJqiFt6VPrSzPakVEy1_WpwqcWD1vAc&index=2
+
+
+https://www.youtube.com/watch?v=OV-ZXKSp9x8&list=PLLZS5yJjC8lYazLbpLqn1VXHNrm3yaNbR
+https://www.youtube.com/watch?v=U52gd7er4FM
+https://www.youtube.com/watch?v=lVpToyIQHC4
+https://www.youtube.com/watch?v=IYyojW6_8kE&list=PLCIZXv6JLFyUOfZAlWqtB043rKcmr75nT&index=23

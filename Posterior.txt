@@ -1,0 +1,54 @@
+POSIBILIDADES PARA LA EXTENSIÓN DE LA BASE DE DATOS
+
+
+
+Articulo
+[id, descripcion, color, marca, modelo, industria, adicional, ]
+
+CLIENTE
+[id,  nombre, direccion, telefono, adicional, ]
+
+DOCUMENTO INGRESO
+[id, proveedor(nr), tipo(char)n numero, fecha]
+
+DOCUMENTO SALIDA
+[id, cliente(number), tipo(char), numero, fecha ]
+
+INGRESO
+[id, documentoIngreso(number), ingreso(fecha), sku(number), cantidad(number), precioUnitario, vencimiento(fecha), lote, adicional  ]
+
+PROVEEDOR
+[id, nombre, direccion, telefono, adicional ]
+
+SALIDA
+[id, documentoSalida, ingreso, cantidad ]
+
+SKU
+[id, articulo(unidad), unidad(number), ubicacion(numero) ]
+
+UBICACION
+[id, descripcion, ]
+
+UNIDAD
+[id, unidad, cantidad, UnidadContenida]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

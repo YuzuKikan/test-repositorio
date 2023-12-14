@@ -1,0 +1,520 @@
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+TIPO DE DATO --- cada tipo de dato tiene su contraparte
+
+byte 	255 	sbyte 	-128 a 127
+short 	
+int 	 	uint 	[solo se le permite nr positivos]
+long 	 	ulong 	
+float 	12.1f	ufloat 
+double 	12.1d 
+decimal 12.1m		[orden de alcance menor a mayor]
+
+char 	'A'
+string 	"AA"
+
+bool 	true/false
+
+DateTime date = DateTime.now [es una clase que representa un objeto]
+				[muestra la fecha del momento]
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+En CSHARP las propiedades tienen valores por defecto. Al no inicializar ya posee un valor/dato por defecto aunque la propia herramienta niega aquello y no la imprimirá hasta inicializarlo con un valor.
+
+--> Todos los TIPOS NATIVOS puedes inicializarlos como OBJETOS y tienen sus métodos.(diferencia del JAVA)
+	int numero = new Int();
+
+--> si no queremos que tenga ningún valor
+	int  numero = null; 	[no nos lo permitirá]
+	int? numero = null; 	[ahora si nos lo permite y funciona para cualquier tipo]
+
+
+--> PALABRA RESERVADA (var) 	IMPORTANTE NO ES IGUAL COMO EN JAVASCRIPT
+::> sirve para crear variables
+::> el nombre de la variable por si misma debe representar su tipo y lo que es
+	Ej. var nombre = "Hector"	
+		automáticamente le va a dar el valor y su tipo de forma inamovible
+		funciona solo en el local, dentro de los métodos
+		
+::> 	se puede crear con valor anónimo para los OBJETOS
+Ej:
+	object persona = new { nombre = "Hector", apellido = "Aldez"}; [son anónimos]
+	Console.WriteLine(persona.nombre); 	[no imprimirá nada ya que pierden sus cualidades como atributos]
+::> 	si usamos el var como:
+	var persona = new { nombre = "Hector", apellido = "Aldez"}; [ya podemos acceder a sus datos ]
+
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+			
+
+CLASE 	[sirve para crear un objeto, es el molde, define que acciones y que atributos tiene un objeto]
+
+OBJETO 	[es cualquier cosa que ves alrededor del universo]
+	es capaz de heredar todos los elementos en CSHARP
+	es la base de todos los elementos de CSHARP .net
+
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+Todas las CLASES tienen atributos
+	MODIFICADORES: public, protected, private
+	[estructura clásica, un modificador de acceso que dice el alcance el atributo]
+	public string Nombre { get; set; }	[realizar objetos o hacer propiedades, que no pueda devolver una cadema mayor de 100 caracteres, etc (limitar en sí)]
+::> si no ponemos un modificador se le pone por defecto un modificador INTERNAL
+	sirve para que el atributo no pueda ser accedido desde otro dll
+	[dll: paquetes compilados en CSHARP que sirven para almacenar librerías, clases y funcionalidades encapsuladas]
+
+PUBLIC 		puede acceder cualquier clase
+PRIVATE 	solo puede acceder la misma clase
+PROTECTED 	solo pueden acceder las clases derivadas de esta
+
+En las CLASES hay atributos que se crean para este y atributos que deben estar asociados para que exista el OBJETO
+
+Al llamar a los atributos con 'this.atributo' es enfocar a los atributos de la clase
+
+::> En el CONSTRUCTOR los parámetros (atributos locales del método) pueden ser usados como valor por defecto y asignarlos al objeto. 
+Hacemos referencia al atributo del objeto e igualar con el valor recibido del parámetro del método
+	this.Nombre = parámetro;
+
+El CONSTRUCTOR no es un tipo, no devuelve el tipo, puede ser público o privado y si no hay se le asigna uno por defecto.
+
+
+Los métodos pueden tanto recibir un parámetro para las las operaciones como sin parámetro, donde toca llamar por referencia dentro del método para las operaciones.
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+HERENCIA
+
+Para decir que la clase es parte de una herencia su sintaxis es:
+	class Heredero : Padre { }
+	[automáticamente obtiene todos los atributos y métodos public, protected, internal]
+
+CONSTRUCTOR
+	public Cerveza() : base("valor1", "valor2")
+			   [hace referencia al constructor del Padre]
+	[aqui no recibimos nada por parámetro y solo usamos el constructor del padre]
+
+::> Archivo principal creamos -> Cerveza cerveza = new Cerveza(); y tendría por defecto
+
+Podemos quitarle los valores por defecto y hacer que lo reciba
+	[característica, puedes poner los parámetros por defecto pero al final de los parámetros de la clase principal]
+	public Cerveza(int Cantidad, string Nombre="nombre1") 
+			: base("valor1", "valor2")
+
+::> Archivo principal -> Cerveza cerveza = new Cerveza(500, "Rubia");
+			[el valor2 es opcional]
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+El 'namespace' es el grupo al que pertenece la clase.
+Muestra la carpeta donde está ubicada y el proyecto de esta.
+
+Al copiar el namespace y la ponemos en nuestro archivo principal en 'using' ya podemos usar la clase.
+
+Ya podemos crear objetos con el tipo de la clase
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+ARREGLOS / ARRAYS
+
+int[] numeros = new int[10] {0,1,2,3,4,5,6,7,8,9}; 
+		[se crea un objeto de tipo X]
+		[podemos poner datos de inicio con {}]
+		[debemos dar una longitud inicial, inamovible]
+		[más rápido que una lista ya que está orientado a una coleccion]
+
+for(int i=0; i<numeros.Length; i++){ ConsoleWriteLine("Iteración"+i+ " - " + numeros[i])
+
+foreach(var numero in numeros) { ConsoleWriteLine(numero) }
+	[recorre siempre y cuando tenga valores]
+
+
+LISTAS ==> PILA & COLA
+
+List<int> lista = new List<int>();
+	[es una clase que implementa regularmente una interfaz]
+	[hay que especificar el tipo al cual hacemos la relacion]
+	[la CLASE LIST tiene varios métodos]
+
+List<Cerveza> cervezas = new List<Cervezas>() { new Cerveza(10, "Morena")}
+
+
+Queue<int> cola = new Queue<int>();
+
+
+[IMPORTANTE: hay muchos tipos de colecciones en CSHARP]
+___________________________________________________________________________________
+___________________________________________________________________________________
+INTERFACES
+
+Un tipo de contrato que haces con una clase donde debe respetar ciertas normal de implementación.
+Sirven en la base práctica de patrones de diseño, organizar código, resolver el problema de la multiherencia y los requisitos para pertenecer a la interfaz (añadir sus métodos en la clase)
+
+
+
+herencia = heredar	interfaz = implementar
+___________________________________________________________________________________
+___________________________________________________________________________________
+BASES DE DATOS 
+
+
+Iremos a usar de la forma más básica posible, también hay otras formas como:
+	sql comand
+	data sets
+	entity framework
+	micro rms --> daper
+
+SQL COMAND
+
+Primero creamos una clase que se conectará con la base de datos, para eso se necesita una CADENA DE CONEXION.
+Aqui creamos un atributo tipo string. 
+	[tiene que tener algunos atributos ]
+	[en este caso sirve SOLO para SQL SERVER, para los demás se usa distinta sintaxis y nombres. Para cada uno tiene una Cadena de Conexion que se puede encontrar en internet.]
+
+::>	private string connectionString
+		= "Data Source=NameServidor;Initial Catalog=NameProyect;"
+		+ "User=sa;Password=123456";
+
+En una BD tienes que conectar 5 cosas(4 principales):
+	1. El servidor al cual se conecta
+	2. Nombre de BD
+	3. Usuario para conectarte
+	4. Contraseña para conectarse
+	5. Puerto por defecto de la BD
+
+::> Creamos un método para que nos regrese un listado de objetos. Como retorna un objeto en donde no hay un registro no devolverá nada, en caso contrario si.
+
+::> hacemos una consulta en string llamada 'query' para sql donde estará la sintaxis
+	[esta consulta puede ser para mostrar/insertar/modificar/eliminar un registro]
+
+::> hacemos uso de la conexión 
+	using() 	sirve para especificar 2 cosas
+		1. para agregar los namespace
+		2. especificar un universo en el cual todo que haya entre { } exista solo aqui y lo que estás creando el objeto será inutil fuera de las llaves
+	using(SqlConnection connection = new SqlConnection(connectionString))
+				[referencia al atributo de esta clase de conexion]
+	SqlCommand command = new SqlCommand(query, connectionString)	
+		[sirve para mandar consultas]
+		[recibe 2 parámetros, el Query y el objeto de Conexion]
+
+Para comenzar la conexion --> connection.Open() = [tras este código se escriben las operaciones]
+Para cerrar la conexion --> connection.Close() = [todo codigo tras este no se ejecutará]
+
+[Entre ambas ponemos el código para leer nuestros resultados.]
+
+Para leer los resultados de cada registro --> 
+	SqlDataReader reader = command.ExecuteReader();
+	[en este punto ya se ejecutó el query]
+
+::> 1. Para ir recogiendo los datos usaremos un bucle de cualquier tipo.
+::> 2. Sabiendo los datos y las posiciones de estas en la BD podemos llamarlas
+
+
+CLASE + METODO + CADENA CONEXION
+___________________________________________________________________________________
+___________________________________________________________________________________
+
+OTRAS 3 operaciones que suelen hacerse en bases de datos
+
+==> crear/insertar nueva información desde csharp
+==> editar la información desde csharp
+==> eliminar la información 
+
+Estas consultas se ponen en el atritubo 'query', cadena de texto que contendrá nuestra consulta a la BD
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+SERIALIZACION Y DESERIALIZACIÓN DE OBJETOS
+
+serrializar ==> [convertir tu objeto en un formato que pueda ser transportado, regularmente es un string y dentro tiene un formato json/xml]
+		json sirve para transferencia de datos, también se usa las solicitudes de http
+		formato que especifica los valores de un objeto
+
+[proceso de un objeto para crear un json]
+Para hacer esto usaremos una in space que contenga las fucionalidades de convertir objetos a json.
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
+
+
+==>	Cerveza cerveza = new Cerveza(10,"Cerveza");
+	string miJson = JsonSerializar.Serialize(cerveza);
+		[con esto ya odemis transferir a una solicitud web, mandarle un servicio estos datos. Objeto transmitido por la Web]
+	File.WriteAllText("nameArchivo.txt",atributo);
+		[guarda el contenido del atributo en un archivo con el nombre]
+
+[crear un json a un objeto]
+La INVERSA, del Json llenar un objeto. [cargar el archivo y obtener el objeto]
+	
+
+==>	string miJson = FileReadAllText("nameArchivo.txt");
+		[guarda el contenido del archivo EXISTENTE en un atributo]
+	Cerveza cerveza = JsonSerializar.Deserializa<Cerveza>(miJson);
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+SOLICITUDES DE SERVICIOS POR MEDIO DE GET
+
+Usaremos una ApiRest:	jsonplaceholder.typicode.com/post
+			[encontraremos un arreglo de objetos]
+			[estos son atributos del objeto representan un post]
+
+En el tiempo de espera de la solicitud a la web podemos realizar otras acciones, para eso es buena práctica usar métodos asíncronos.
+
+==>	static async Task Main(string[] args){}
+	[el 'Task' creará automaticamente el 'using System.Threading.Tasks;']
+	[para que haga solicitudes asíncronas]
+
+==> 	Para hacer una solicitud necesitamos un string que contenga la url de la api
+	[el url acaba en '.com/post' pero puede ser 'post/get/put/pach/etc']
+
+==>	Para las conecciones creamos una clase
+	HttpClient client = new HttpClient();
+	[se creará 'using System.Net.Http;']
+
+==>2	Con la clase client haremos la solicitud con un método llamado "get async"
+	var res = client.GetAsync(url);
+	{todos los demás codigos}
+	await res;
+	["await" impide que siga leyendo demás códigos hasta que no termine la solicitud web de 'res']
+
+==>1 	var httpResponse = await client.GetAsync(url);
+	if (httpResponse.IsSuccessStatusCode)
+	[nos cercionamos que se ha encontrado y devuelto con éxito, los post]
+	
+==> 	segun sea el codigo que devuelva el Api, creamos una clase objeto nueva. De esta forma podemos enviar los datos en una clase donde podamos manipular en CSHARP
+
+==> 	como nos devolverá una lista de post, haremos que nos dé todo lo del body
+	var content = await httpResponse.Content.ReadAsStringAsync();
+			[como este método tmb es asincrono, pues ponemos 'await']
+	[LEERÁ EL BODY]
+
+==> 	ahora podemos deserializar el string; [este caso devuelve un obj List de Post]
+	List<Models.Post> posts = JsonSerializar.Deserialize<List<Models.Post>>(content)
+							     [obj esperado]   [lo recibido]
+	[CONVIERTE UNA LISTA DE ELEMENTOS]
+	
+
+==> 	Si lo ejecutamos, en el bug y al pasar por el objeto veremos los elementos
+	Deja de ser una cadena de texto a ser un objeto tangible por CSHARP
+	
+	
+	
+___________________________________________________________________________________
+___________________________________________________________________________________
+SOLICITUDES DE SERVICIOS POR MEDIO DE HTTP/POST/PUT/DELETE 	[POST]
+	
+	string url = "https://jsonplaceholder.typicode.com/posts";
+	HttpClient client = new HttpClient();
+	
+==>	mandaremos un objeto creado
+	[a tener en cuenta que el id se crea en el Api por lo tanto debemos enviar solo los atributos necesarios]
+
+	Post post = new Post(){ userId=50; body="hola"; title="titulo"};
+	
+	[el objetivo es serializar este objeto en json]
+	var data = JsonSerializer.Serialize<Post>(post);
+
+	[para mandar el contenido hay que poner una especificación]
+	[datos que hemos serializado, el formato, especificar el tipo de contenido]
+	HttpContent content =new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+	
+	[la parte de la solicitud, guardamos la respuesta en una variable]
+	var httpResponse = await client.PostAsync(url, content);
+					[lo mandamos por post]
+	
+	tras verificar que no haya problemas no devolverá datos, estos datos hay que especificar cuales queremos ya que nos puede devolver STATUS, COOKIES, HEADERS, BODY
+		
+	var result = await httpResponse.Content.ReadAsStringAsync();
+		[el contenido que mandamos nos lo regresa junto al id que lo añade este]
+	var postResult = JsonSerializer.Deserialize<Post>(result);
+		[convertimos los datos devueltos en un objeto y observamos que nos añadió el id además de los datos enviados anteriormente]
+	
+::> PUT	[este recibe un id y realiza el edit]
+
+string url = "https://jsonplaceholder.typicode.com/posts/99";
+							[nr del identificador]
+
+::> DELETE [no lleva objeto, solo el identificador]
+	[no devolverá nada ya que borra]
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+GENERIC --- sirve para decir a la clase con que tipo de objeto va a trabajar
+	
+SendRequest sería la clase que va a mandar las solicitudes post sin importar el objeto	
+Debemos convertir esta clase en generico para que pueda recibir una clase con cual debe trabajar.
+	public class SendRequest<T>
+		[la "T" indica que recibirá una clase que le va a definir el objeto con el cual trabajará]
+	puede trabajar con "T atributo = X" o "metodos de T"
+	
+	esta clase mante un objeto sin importar el tipo por una solicitud HttpPost.
+	[Si no fuera generic se debería crear varias clases por cada objeto para que el objeto fuera compatible con el método]
+	
+	public async Task<T> Send(T model)
+		     [regresa un tipo de objeto de mismo tipo]
+			     [nameMetodo]
+				   [recibirá un objeto del mismo tipo]
+	
+	
+No puede regresar un null en generics ya que podría tener clases que sus objetos no puedan ser nulos 
+==> 	return null; [esto va a fallar porque no sabe si el objeto que va a recibir o la clase que va a definir esta clase, la clase que va a recibir como generic pueda ser null  ]
+==> 	return default(T); [por ello usamos el dafault que practicamente busca cual es el objeto que es default, el tipo de dato o el tipo de valor que es default para el tipo de objeto que estas enviando]
+
+
+usamos la clase que creamos
+
+	Service.SendRequest<Cerveza> service = await service.SendRequest<Cerveza>();
+	[clase, el metodo, el tipo objeto] [recibe el tipo de objeto trabaja la clase]
+	service.Send(cerveza);
+	[ejecutamos el metodo que nos regresa un objeto que tiene valor]
+
+Para limitar ul uso del Generic y lo usen solo cierto grupo o categoría usaremos el "where" seguido de una interfaz
+	[es una interfaz vacia que solo servirá para decir si la clase será algo que se enviará]
+
+
+EJEMPLO DE CLASES Y SUS ENTRADAS
+1.    public class SendRequest<T> where T : IRequeestable
+2.    public class SendRequest<T,U,V,W,X,Y,Z> where T : IRequeestable where U : IBebida
+
+1.    Service.SendRequest<Cerveza> service = await service.SendRequest<Cerveza>();
+2.    Service.SendRequest<Cerveza, Post,,,,> service = await service.SendRequest<Cerveza>();
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+LINQ 
+
+sirve para hacer consultas a colleciones [de BD, xml, json, arreglos, etc]
+
+para poder usarlo "using System.Linq;"
+
+	var numero7 = numeros.Where(k => k==7).FirstOrDefault();
+
+Where()	[método de extensión de LINQ + expresión Lambnda]
+	[entre paréntesis hay un parámetro que este caso es un predicado]
+	[el predicado es a continuación resultado de una operación]
+
+es una extensión donde podemos usar la sintaxis de SQL en CSHARP ya sea para hacer consultas de tipo busqueda, crear, modificar o borrar.
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+EXCEPCIONES
+
+es para controlar que el programa no caiga cuando entra en un flujo que no debería de ocurrir pero ocurre. (BD no disponible, No Wifi, hackeo, archivo por abrir inexistente, permisos, etc)
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+
+###### STATIC
+
+un método static pertenece a la clase y no al objeto
+
+###### DELEGADOS
+
+ayudan a crear y realizar funciones intermedias
+
+En caso de crear muchos delegados para cada tipo de devolver o cantidad de parñametros a introducir. Allí entra Action y Func.
+
+
+==>2	public delegate string Mostrar(string cadena);
+
+==>0-4	static async Task Main(string[] args)
+        	{ Mostrar mostrar = Show; HacerAlgo(mostrar); }
+
+==>1	public static void HacerAlgo(Mostrar funcionFinal)
+        	{ funcionFinal("hola"); }
+	
+==>3	public static string Show(string cad)
+       		{ Console.WriteLine("Hola soy un delegado" + cad); }
+
+###### FUNC
+
+
+###### Funciones anónimas 
+
+Action<string, string> mostrar = (a,b)=>Console.WriteLine(a+b);
+
+###### PREDICATED
+
+sirven para guardar operaciones
+	var predicate = new Predicate<------>(------);
+				[<trabajará con nr> ; (función que recibe)]
+los Predicates tienen que ser boleanos, creamos un método bool donde se hará la operación
+
+listo, la variable Predicate tendrá la lógica guardada, ya sea a través de una función definida o anónima.
+	var predicate = new Predicate<------>(IsDivider2);
+	var predicate = new Predicate<------>(x => x % 2 == 0);
+
+Con esta operacion Bool podemos hacer una Predicate de negación
+___________________________________________________________________________________
+___________________________________________________________________________________
+
+IMPORTANTE 	---> hay que tener cuidado de la version de 
+		---> 
+
+
+COMO DEBERÍA CREAR UN NUEVO PROYECTO EN VISUAL STUDIO PARA .NET6 Y CSHARP???
+
+
+USING 	sirve para crear un objeto el cual mande por defecto la función response 
+
+
+
+
+
+
+
+DESCANSO 15:57
+
+COMER 14:50
+
+HORA DE COMER 15:15
+
+COOMER 15:10
+
+
+
+https://www.youtube.com/watch?v=JuXRmWQFYig&list=PLWYKfSbdsjJgCXQ_Y_d76x-v9hR8Tr_1v&index=15
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+https://www.youtube.com/watch?v=zBPqMsP3-cs&list=PLWYKfSbdsjJgCXQ_Y_d76x-v9hR8Tr_1v&index=2
+
+https://www.youtube.com/watch?v=rth1PVNguXQ&list=PLx2nia7-PgoDbCAY2nGXAcIl_zkQKA2Ap
+
+https://www.youtube.com/watch?v=QTq6yQZzvlw&list=PL954bYq0HsCWRPz-vE2qWvVRLdKsHJuSx
+
+https://programacion.top/c-sharp/tipos-de-datos-y-variables-en-c-sharp/
+
+https://www.youtube.com/watch?v=K902i_tsXl0&list=PLWYKfSbdsjJiiaXNIW1OYhRnStsyGvr6t
+
+
+
+https://www.youtube.com/watch?v=tZ2MEIBN8RA&list=PLWYKfSbdsjJgCXQ_Y_d76x-v9hR8Tr_1v&index=7
+
+##############################################
+[app .net]	https://www.youtube.com/watch?v=Ba_bfGTsbjg
+[.net core C#] 	https://www.youtube.com/watch?v=qVietAcR_ag&list=PLLJJqiFt6VPrSzPakVEy1_WpwqcWD1vAc&index=2
+[instalar visual]	https://www.youtube.com/watch?v=GKFH0GdQ1FQ
+[web api rest] 	https://www.youtube.com/watch?v=uVe9AX7I-sU&t=8s
+[CSharp y SQL Server]  	https://www.youtube.com/watch?v=Mu7mp3BQcfg
+
+[CSharp medio]	https://www.youtube.com/watch?v=YKyscQU1s-U
+
+
+https://www.campusmvp.es/recursos/post/10-diferencias-entre-net-core-y-net-framework.aspx
+https://learn.microsoft.com/es-es/dotnet/core/porting/project-structure
+
+
+
+
+
+
+

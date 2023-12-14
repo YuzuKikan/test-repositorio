@@ -1,0 +1,45 @@
+[No generes los IDs desde la Base de Datos, genéralos desde el Frontend] 	ttps://www.youtube.com/watch?v=wR5b0OhbUyw
+
+[Angular 14 CRUD con Angular Material | API REST ASP.NET CORE]		https://www.youtube.com/watch?v=7USizyX1tAQ
+
+
+[ASP.NET C♯ || CRUD básico con una página maestra y WebForms en .Net Framework (Bootstrap CSS) [2022]]		https://www.youtube.com/watch?v=lVpToyIQHC4
+
+
+[Curso de sistema web en ASP.NET MVC 5 + SQL Server - Parte 01]		https://www.youtube.com/watch?v=16N5OhcrLws&list=PLx2nia7-PgoDptcrh4k4ZStjpVLZbS7rU
+
+
+
+
+
+
+
+
+[PROYECTO ACTUAL]	https://www.youtube.com/watch?v=ag0VE9ueJ8I&list=PLCIZXv6JLFyUOfZAlWqtB043rKcmr75nT&index=2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
